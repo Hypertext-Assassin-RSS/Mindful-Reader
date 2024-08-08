@@ -1,0 +1,6 @@
+{
+  "appTitle": "mindful_reader",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
