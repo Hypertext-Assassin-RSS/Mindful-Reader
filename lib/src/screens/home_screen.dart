@@ -1,4 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'explore_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,19 +14,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _pages = <Widget>[
     Text(
       'Home Page',
       style: TextStyle(fontSize: 24),
     ),
-    Text(
-      'Explore Page',
-      style: TextStyle(fontSize: 24),
-    ),
-    Text(
-      'Profile Page',
-      style: TextStyle(fontSize: 24),
-    ),
+    ExploreScreen(), // Navigate to ExploreScreen
+    ProfileScreen(), // Navigate to ProfileScreen
   ];
 
   void _onItemTapped(int index) {
@@ -43,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
       ),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _pages.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
