@@ -1,6 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
+import 'home_screen.dart'; // Import the HomeScreen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  void _login() {
+    // Navigate to the HomeScreen when the login button is pressed
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Title with Slide & Fade Animation
               Text(
                 isLogin ? 'Welcome Back' : 'Create Account',
                 style: GoogleFonts.montserrat(
@@ -41,11 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
               .animate()
               .slideY(begin: -0.3, duration: 600.ms)
               .fadeIn(duration: 600.ms)
-              .then(delay: 200.ms), // Chained animation
+              .then(delay: 200.ms), 
               
               const SizedBox(height: 40),
 
-              // Email Field with Padding and Fade Animation
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: _buildTextField('Email', false)
@@ -55,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 20),
 
-              // Password Field with Padding and Fade Animation
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: _buildTextField('Password', true)
@@ -69,15 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: _buildTextField('Confirm Password', true)
                     .animate()
-                    .fadeIn(duration: 100.ms),
+                    .fadeIn(duration: 1000.ms),
                 ),
               ],
 
               const SizedBox(height: 40),
 
-              // Button with Scale & Fade Animation
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _login, // Call _login when pressed
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
                   backgroundColor: Colors.white,
@@ -100,7 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 20),
 
-              // Toggle between Login and Signup with Fade & Slide Animation
               GestureDetector(
                 onTap: toggleForm,
                 child: Text(
@@ -137,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),  // Added padding
+        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
       ),
     );
   }
