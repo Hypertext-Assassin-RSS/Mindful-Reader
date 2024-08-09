@@ -1,5 +1,6 @@
-// book_details_screen.dart
 import 'package:flutter/material.dart';
+
+import '../read/read_book_screen.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> book;
@@ -8,6 +9,8 @@ class BookDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bookUrl = book['formats']['text/html'] ?? '';
+
     return Scaffold(
       appBar: AppBar(
         title: Text(book['title'] ?? 'Book Details'),
@@ -22,7 +25,7 @@ class BookDetailsScreen extends StatelessWidget {
           children: [
             if (book['formats']['image/jpeg'] != null)
               AspectRatio(
-                aspectRatio: 1/ 0.7,
+                aspectRatio: 1 / 0.7,
                 child: Image.network(
                   book['formats']['image/jpeg']!,
                   fit: BoxFit.contain,
@@ -31,7 +34,7 @@ class BookDetailsScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               book['title'] ?? 'Unknown Title',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             Text(
@@ -54,11 +57,21 @@ class BookDetailsScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Implement download
-              },
-              child: const Text('Download Book'),
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ReadBookScreen(bookUrl: bookUrl),
+                      ),
+                    );
+                  },
+                  child: const Text('Read Book'),
+                ),
+              ),
             ),
           ],
         ),
