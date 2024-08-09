@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'book_details_screen.dart'; // Import the BookDetailsScreen
+import '../details/book_details_screen.dart'; // Import the BookDetailsScreen
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
