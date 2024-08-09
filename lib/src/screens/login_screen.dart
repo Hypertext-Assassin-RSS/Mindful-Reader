@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     // Navigate to the HomeScreen when the login button is pressed
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
 

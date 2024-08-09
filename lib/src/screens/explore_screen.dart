@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'book_details_screen.dart'; // Import the BookDetailsScreen
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -35,7 +36,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Explore Books',style: TextStyle(color: Colors.black),),backgroundColor: Colors.white,elevation: 0,),
       body: _buildBookGrid(),
     );
   }
@@ -56,29 +56,39 @@ class _ExploreScreenState extends State<ExploreScreen> {
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
-        return Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Image.network(
-                  book['formats']['image/jpeg'] ??
-                      'https://via.placeholder.com/150',
-                  fit: BoxFit.cover,
-                ),
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookDetailsScreen(book: book),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  book['title'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+            );
+          },
+          child: Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Image.network(
+                    book['formats']['image/jpeg'] ??
+                        'https://via.placeholder.com/150',
+                    fit: BoxFit.cover,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    book['title'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -1,10 +1,10 @@
-// ignore_for_file: library_private_types_in_public_api
-
+// home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'explore_screen.dart';
 import 'profile_screen.dart';
+import 'book_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -64,10 +64,19 @@ class _HomeScreenState extends State<HomeScreen> {
     if (selectedCategory != category) {
       setState(() {
         selectedCategory = category;
-        books = []; // Clear the books list before fetching new data
+        books = [];
       });
       fetchBooks(category);
     }
+  }
+
+  void _onBookSelected(Map<String, dynamic> book) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookDetailsScreen(book: book),
+      ),
+    );
   }
 
   @override
@@ -165,29 +174,32 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
-        return Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Image.network(
-                  book['formats']['image/jpeg'] ??
-                      'https://via.placeholder.com/150',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  book['title'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+        return GestureDetector(
+          onTap: () => _onBookSelected(book),
+          child: Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Image.network(
+                    book['formats']['image/jpeg'] ??
+                        'https://via.placeholder.com/150',
+                    fit: BoxFit.cover,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    book['title'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
