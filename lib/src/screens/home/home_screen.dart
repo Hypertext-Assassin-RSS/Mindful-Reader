@@ -130,25 +130,27 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final category = categories[index];
+          final isSelected = selectedCategory == category;
           return GestureDetector(
             onTap: () => _onCategorySelected(category),
             child: Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.symmetric(horizontal: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                color: selectedCategory == category
-                    ? Colors.blueAccent
-                    : Colors.grey[300],
+                color: isSelected ? Colors.blueAccent : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isSelected ? Colors.blueAccent : Colors.grey[300]!,
+                  width: 1,
+                ),
               ),
               child: Text(
                 category,
                 style: TextStyle(
-                  color: selectedCategory == category
-                      ? Colors.white
-                      : Colors.black,
-                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : Colors.black87,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
                 ),
               ),
             ),
@@ -157,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 
   Widget _buildBookGrid() {
     if (books.isEmpty) {
