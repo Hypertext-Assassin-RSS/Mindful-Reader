@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../colors/color.dart';
-
 class ItemCards extends StatelessWidget {
   const ItemCards({
     super.key,
@@ -16,64 +14,67 @@ class ItemCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Container(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
             height: 200,
             width: 150,
             decoration: BoxDecoration(
-              color: KFourthColor,
+              color: Colors.grey[300],
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 image: NetworkImage(imagepic),
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 onError: (Object error, StackTrace? stackTrace) {
-                  // Error handling can be done here
+                  // Error
                 },
               ),
             ),
-            // This is a fallback for when the network image fails to load
             child: Image.network(
               imagepic,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
                 return Image.asset(
-                  'assets/images/imgae_not.jpg',
-                  fit: BoxFit.fill,
+                  'assets/images/image_not.jpg',
+                  fit: BoxFit.cover,
                 );
               },
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Text(
-            text1,
-            maxLines: 1,
-            style: const TextStyle(
-              fontSize: 14,
-              overflow: TextOverflow.ellipsis,
-              fontWeight: FontWeight.w800,
-              color: KFifthColor,
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: SizedBox(
+              width: 150,  // Fixed width for the text
+              child: Text(
+                text1,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
+          SizedBox(
+            width: 150,  // Fixed width for the text
+            child: Text(
               text2,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: KFifthColor.withOpacity(0.7),
+                color: Colors.black.withOpacity(0.7),
               ),
-            )
-          ],
-        ),
-      ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

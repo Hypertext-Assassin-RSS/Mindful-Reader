@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -25,25 +26,24 @@ class _HomePageState extends State<HomePage> {
     fetchBooks();
   }
 
-  Future<void> fetchBooks() async {
-    try {
-      final response = await http.get(Uri.parse('https://gutendex.com/books'));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          books = data['results'];
-          isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to load books');
-      }
-    } catch (e) {
-      print('Error fetching books: $e');
+Future<void> fetchBooks() async {
+  try {
+    final response = await Dio().get('https://gutendex.com/books');
+    if (response.statusCode == 200) {
       setState(() {
+        books = response.data['results'];
         isLoading = false;
       });
+    } else {
+      throw Exception('Failed to load books');
     }
+  } catch (e) {
+    print('Error fetching books: $e');
+    setState(() {
+      isLoading = false;
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {
