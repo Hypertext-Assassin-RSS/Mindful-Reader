@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../read/read_book_screen.dart';
+import 'read.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> book;

@@ -18,6 +18,8 @@ dependencies:
   flutter_animate: ^4.0.0
   http: 1.2.2
   webview_flutter: ^2.0.10
+  intl: ^0.18.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -34,5 +36,6 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/icons/
     - assets/books.json
     - assets/great_gatsby.pdf
