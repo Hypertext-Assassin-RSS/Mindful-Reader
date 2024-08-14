@@ -36,7 +36,7 @@ jobs:
     - name: Create Pull Request to Master
       uses: peter-evans/create-pull-request@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GH_TOKEN }}
         branch: dev
         base: master
         title: 'Automated PR: Merge dev into master'
