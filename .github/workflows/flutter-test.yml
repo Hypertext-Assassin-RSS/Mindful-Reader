@@ -3,7 +3,7 @@ name: Flutter Test and PR
 on:
   push:
     branches:
-      - dev
+      - dev  # Trigger the workflow on commits to the 'dev' branch
 
 jobs:
   test:
@@ -27,7 +27,7 @@ jobs:
   create-pull-request:
     runs-on: ubuntu-latest
     needs: test
-    if: success()  # Only run if the test succeeded
+    if: success()  # Only run if the previous job (test) succeeded
 
     steps:
     - name: Checkout code
@@ -36,7 +36,7 @@ jobs:
     - name: Create Pull Request to Master
       uses: peter-evans/create-pull-request@v4
       with:
-        token: ${{ secrets.GH_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         branch: dev
         base: master
         title: 'Automated PR: Merge dev into master'
