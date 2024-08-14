@@ -36,9 +36,11 @@ jobs:
     - name: Create Pull Request to Master
       uses: peter-evans/create-pull-request@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.DEV_ENV_TOKEN }}  # Use DEV_ENV_TOKEN from the environment
         branch: dev
         base: master
         title: 'Automated PR: Merge dev into master'
         body: |
           This pull request is automatically created by GitHub Actions after successful tests.
+    env:
+      DEV_ENV_TOKEN: ${{ secrets.DEV_ENV_TOKEN }}  # Reference the environment secret here
