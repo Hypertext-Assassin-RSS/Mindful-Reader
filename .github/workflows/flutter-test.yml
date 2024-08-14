@@ -3,7 +3,7 @@ name: Flutter Test and PR
 on:
   push:
     branches:
-      - dev  # Trigger the workflow on commits to the 'dev' branch
+      - dev
 
 jobs:
   test:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.13.0' # Replace with your desired Flutter version
+        flutter-version: '3.3.4'
 
     - name: Install dependencies
       run: flutter pub get
@@ -27,7 +27,7 @@ jobs:
   create-pull-request:
     runs-on: ubuntu-latest
     needs: test
-    if: success()  # Only run if the previous job (test) succeeded
+    if: success()  # Only run if the test succeeded
 
     steps:
     - name: Checkout code
