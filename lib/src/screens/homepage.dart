@@ -29,20 +29,24 @@ class _HomePageState extends State<HomePage> {
     try {
       final response = await Dio().get('https://gutendex.com/books');
       if (response.statusCode == 200) {
-        setState(() {
-          books = response.data['results'];
-          isLoading = false;
-        });
+        if (mounted) {  // Check if the widget is still mounted
+          setState(() {
+            books = response.data['results'];
+            isLoading = false;
+          });
+        }
       } else {
         throw Exception('Failed to load books');
       }
     } catch (e) {
-      print('Error fetching books: $e');
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {  // Check if the widget is still mounted
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
