@@ -28,16 +28,40 @@ jobs:
         name: release-apk
         path: build/app/outputs/flutter-apk/app-release.apk
 
+    - name: Get latest release version
+      id: get-latest-release
+      run: |
+        latest_release=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+        echo "LATEST_RELEASE=${latest_release}" >> $GITHUB_ENV
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Determine next version
+      id: determine-version
+      run: |
+        if [ "${{ env.LATEST_RELEASE }}" = "null" ]; then
+          next_version="v1.0.0"
+        else
+          current_version="${{ env.LATEST_RELEASE }}"
+          major=$(echo $current_version | cut -d '.' -f 1 | sed 's/v//')
+          minor=$(echo $current_version | cut -d '.' -f 2)
+          patch=$(echo $current_version | cut -d '.' -f 3)
+          new_patch=$((patch + 1))
+          next_version="v${major}.${minor}.${new_patch}"
+        fi
+        echo "NEXT_VERSION=${next_version}" >> $GITHUB_ENV
+
     - name: Create a draft release
+      id: create-release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: release-${{ github.run_id }}
-        release_name: Release ${{ github.run_id }}
+        tag_name: ${{ env.NEXT_VERSION }}
+        release_name: Release ${{ env.NEXT_VERSION }}
         draft: true
         body: 'Automated draft release created by GitHub Actions'
-        
+
     - name: Upload release asset
       uses: actions/upload-release-asset@v1
       with:
@@ -45,3 +69,5 @@ jobs:
         asset_path: build/app/outputs/flutter-apk/app-release.apk
         asset_name: app-release.apk
         asset_content_type: application/vnd.android.package-archive
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
