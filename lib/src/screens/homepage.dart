@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:math';
 
@@ -8,6 +7,7 @@ import 'banner.dart';
 import 'category.dart';
 import 'itemcards.dart';
 import 'trends.dart';
+import 'details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,24 +26,24 @@ class _HomePageState extends State<HomePage> {
     fetchBooks();
   }
 
-Future<void> fetchBooks() async {
-  try {
-    final response = await Dio().get('https://gutendex.com/books');
-    if (response.statusCode == 200) {
+  Future<void> fetchBooks() async {
+    try {
+      final response = await Dio().get('https://gutendex.com/books');
+      if (response.statusCode == 200) {
+        setState(() {
+          books = response.data['results'];
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load books');
+      }
+    } catch (e) {
+      print('Error fetching books: $e');
       setState(() {
-        books = response.data['results'];
         isLoading = false;
       });
-    } else {
-      throw Exception('Failed to load books');
     }
-  } catch (e) {
-    print('Error fetching books: $e');
-    setState(() {
-      isLoading = false;
-    });
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +67,20 @@ Future<void> fetchBooks() async {
                 children: books.map((book) {
                   return InkWell(
                     onTap: () {
-                      // Handle book click
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            imageUrl: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
+                            title: book['title'] ?? 'Unknown Title',
+                            author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
+                            description: book['description'] ?? 'No description available.',
+                          ),
+                        ),
+                      );
                     },
                     child: ItemCards(
-                      imagepic: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg', // Fallback image
+                      imagepic: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
                       text1: book['title'] ?? 'Unknown Title',
                       text2: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
                     ),
@@ -87,7 +97,17 @@ Future<void> fetchBooks() async {
                 children: books.map((book) {
                   return InkWell(
                     onTap: () {
-                      // Handle book click
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            imageUrl: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
+                            title: book['title'] ?? 'Unknown Title',
+                            author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
+                            description: book['description'] ?? 'No description available.',
+                          ),
+                        ),
+                      );
                     },
                     child: ItemCards(
                       imagepic: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',

@@ -1,76 +1,111 @@
 import 'package:flutter/material.dart';
+import '../colors/color.dart';
 
-import 'read.dart';
+class DetailsScreen extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final String author;
+  final String description;
 
-class BookDetailsScreen extends StatelessWidget {
-  final Map<String, dynamic> book;
-
-  const BookDetailsScreen({super.key, required this.book});
+  const DetailsScreen({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.author,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final bookUrl = book['formats']['text/html'] ?? '';
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(book['title'] ?? 'Book Details'),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        title: Text(title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (book['formats']['image/jpeg'] != null)
-              AspectRatio(
-                aspectRatio: 1 / 0.7,
-                child: Image.network(
-                  book['formats']['image/jpeg']!,
-                  fit: BoxFit.contain,
+            Center(
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                // width: 200, 
+                height: 300,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/imgae_not.jpg',
+                    fit: BoxFit.cover,
+                    // width: 200,
+                    height: 300,
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 40,
+                  width: 140,
+                  decoration: BoxDecoration(
+                    color: KFourthColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    'Read',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: KPrimaryColor,
+                    ),
+                  ),
                 ),
               ),
-            const SizedBox(height: 16),
-            Text(
-              book['title'] ?? 'Unknown Title',
-              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Author(s): ${book['authors']?.map((a) => a['name'])?.join(', ') ?? 'Unknown'}',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Subjects: ${book['subjects']?.join(', ') ?? 'None'}',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Description:',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'This section would typically include a detailed description of the book. For now, this is a placeholder.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReadBookScreen(bookUrl: bookUrl),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {
+
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 40,
+                      // width: 140,
+                      decoration: BoxDecoration(
+                        color: KFourthColor,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    );
-                  },
-                  child: const Text('Read Book'),
-                ),
+                      child: Text(
+                        author,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w700,
+                          color: KPrimaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
               ),
             ),
           ],
