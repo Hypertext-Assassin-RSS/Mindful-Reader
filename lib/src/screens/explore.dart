@@ -63,7 +63,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   imageUrl: book['formats']['image/jpeg'] ?? 'https://via.placeholder.com/150',
                   title: book['title'],
                   author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown',
-                  description: book['subjects'].join(', '), // or any other description
+                  description: book['subjects'].join(', '), 
+                  bookUrl: book['formats']['text/html']
                 ),
               ),
             );

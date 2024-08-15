@@ -73,7 +73,8 @@ class _HomePageState extends State<HomePage> {
                             imageUrl: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
                             title: book['title'] ?? 'Unknown Title',
                             author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
-                            description: book['description'] ?? 'No description available.',
+                            description: book['description'] ?? 'No description available.', 
+                            bookUrl: book['formats']['text/html']
                           ),
                         ),
                       );
@@ -103,7 +104,8 @@ class _HomePageState extends State<HomePage> {
                             imageUrl: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
                             title: book['title'] ?? 'Unknown Title',
                             author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
-                            description: book['description'] ?? 'No description available.',
+                            description: book['description'] ?? 'No description available.', 
+                            bookUrl: book['formats']['text/html']
                           ),
                         ),
                       );
