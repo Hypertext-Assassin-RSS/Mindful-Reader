@@ -5,7 +5,7 @@ import '../colors/color.dart';
 
 class BannerSection extends StatelessWidget {
   final Map<String, dynamic> book;
-  
+
   const BannerSection({
     super.key,
     required this.book,
@@ -28,8 +28,8 @@ class BannerSection extends StatelessWidget {
 
     String imageUrl = book['formats']['image/jpeg'] ?? 'assets/images/placeholder.png';
     String title = book['title'] ?? 'Unknown Title';
-    String author = book['authors'] != null && book['authors'].isNotEmpty 
-        ? book['authors'][0]['name'] 
+    String author = book['authors'] != null && book['authors'].isNotEmpty
+        ? book['authors'][0]['name']
         : 'Unknown Author';
 
     return Align(
@@ -51,9 +51,6 @@ class BannerSection extends StatelessWidget {
                       KFourthColor.withOpacity(0.85),
                       BlendMode.srcATop,
                     ),
-                    onError: (exception, stackTrace) {
-                      // Fallback image in case of error
-                    },
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -78,7 +75,7 @@ class BannerSection extends StatelessWidget {
                           fontWeight: FontWeight.w300,
                           color: KPrimaryColor.withOpacity(0.7),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -95,7 +92,7 @@ class BannerSection extends StatelessWidget {
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10, top: 10),
                         child: Container(
                           height: 80,
                           width: 80,
@@ -105,40 +102,42 @@ class BannerSection extends StatelessWidget {
                             image: DecorationImage(
                               image: NetworkImage(imageUrl),
                               fit: BoxFit.fill,
-                              onError: (exception, stackTrace) {
-                                // Fallback image in case of error
-                              },
                             ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 25, left: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: KFifthColor,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: KFifthColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text(
+                              const SizedBox(height: 10),
+                              Text(
                                 'Author: $author',
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   color: KFifthColor.withOpacity(0.7),
                                 ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'dart:math';
 
 import 'banner.dart';
@@ -30,20 +29,24 @@ class _HomePageState extends State<HomePage> {
     try {
       final response = await Dio().get('https://gutendex.com/books');
       if (response.statusCode == 200) {
-        setState(() {
-          books = response.data['results'];
-          isLoading = false;
-        });
+        if (mounted) {  // Check if the widget is still mounted
+          setState(() {
+            books = response.data['results'];
+            isLoading = false;
+          });
+        }
       } else {
         throw Exception('Failed to load books');
       }
     } catch (e) {
-      print('Error fetching books: $e');
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {  // Check if the widget is still mounted
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,8 @@ class _HomePageState extends State<HomePage> {
                             imageUrl: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
                             title: book['title'] ?? 'Unknown Title',
                             author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
-                            description: book['description'] ?? 'No description available.',
+                            description: book['description'] ?? 'No description available.', 
+                            bookUrl: book['formats']['text/html']
                           ),
                         ),
                       );
@@ -104,7 +108,8 @@ class _HomePageState extends State<HomePage> {
                             imageUrl: book['formats']['image/jpeg'] ?? 'assets/images/imgae_not.jpg',
                             title: book['title'] ?? 'Unknown Title',
                             author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown Author',
-                            description: book['description'] ?? 'No description available.',
+                            description: book['description'] ?? 'No description available.', 
+                            bookUrl: book['formats']['text/html']
                           ),
                         ),
                       );

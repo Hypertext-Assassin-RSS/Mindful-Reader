@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'src/screens/login.dart';
+// ignore: unused_import
 import 'package:mindful_reader/src/widgets/bottomnav.dart';
 import './src/colors/color.dart';
 

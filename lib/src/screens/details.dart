@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../colors/color.dart';
+import 'read.dart'; // Import the ReadBookScreen
 
 class DetailsScreen extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String author;
   final String description;
+  final String bookUrl; // Add the book URL
 
   const DetailsScreen({
     super.key,
@@ -13,6 +15,7 @@ class DetailsScreen extends StatelessWidget {
     required this.title,
     required this.author,
     required this.description,
+    required this.bookUrl, // Add the book URL to the constructor
   });
 
   @override
@@ -29,13 +32,11 @@ class DetailsScreen extends StatelessWidget {
               child: Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
-                // width: 200, 
                 height: 300,
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     'assets/images/imgae_not.jpg',
                     fit: BoxFit.cover,
-                    // width: 200,
                     height: 300,
                   );
                 },
@@ -45,7 +46,13 @@ class DetailsScreen extends StatelessWidget {
             Center(
               child: InkWell(
                 onTap: () {
-
+                  // Navigate to the ReadBookScreen when the "Read" button is pressed
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReadBookScreen(bookUrl: bookUrl),
+                    ),
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -78,13 +85,10 @@ class DetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                     child: Container(
                       alignment: Alignment.center,
                       height: 40,
-                      // width: 140,
                       decoration: BoxDecoration(
                         color: KFourthColor,
                         borderRadius: BorderRadius.circular(10),

@@ -1,9 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'details.dart'; // Import the BookDetailsScreen
+import 'details.dart'; // Import the DetailsScreen
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -61,7 +59,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BookDetailsScreen(book: book),
+                builder: (context) => DetailsScreen(
+                  imageUrl: book['formats']['image/jpeg'] ?? 'https://via.placeholder.com/150',
+                  title: book['title'],
+                  author: book['authors'].isNotEmpty ? book['authors'][0]['name'] : 'Unknown',
+                  description: book['subjects'].join(', '), 
+                  bookUrl: book['formats']['text/html']
+                ),
               ),
             );
           },
@@ -71,8 +75,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               children: [
                 Expanded(
                   child: Image.network(
-                    book['formats']['image/jpeg'] ??
-                        'https://via.placeholder.com/150',
+                    book['formats']['image/jpeg'] ?? 'https://via.placeholder.com/150',
                     fit: BoxFit.cover,
                   ),
                 ),
