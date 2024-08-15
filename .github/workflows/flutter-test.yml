@@ -1,0 +1,25 @@
+name: Flutter Test and PR
+
+on:
+  push:
+    branches:
+      - dev  # Trigger the workflow on commits to the 'dev' branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Run tests
+      run: flutter test --coverage

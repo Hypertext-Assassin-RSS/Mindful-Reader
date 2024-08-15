@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:mindful_reader/src/widgets/bottomnav.dart';
 
-import '../home/home_screen.dart'; // Import the HomeScreen
+// Import the HomeScreen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     // Navigate to the HomeScreen when the login button is pressed
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const BottomNavBar()),
     );
   }
 

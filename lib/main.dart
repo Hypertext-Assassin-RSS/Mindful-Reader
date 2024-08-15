@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'src/screens/login/login_screen.dart';
+import 'src/screens/login.dart';
+import 'package:mindful_reader/src/widgets/bottomnav.dart';
+import './src/colors/color.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +16,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Login',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: KFifthColor
       ),
+      // home: const BottomNavBar(),
       home: const LoginScreen(),
     );
   }
