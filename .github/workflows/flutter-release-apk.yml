@@ -46,3 +46,5 @@ jobs:
         asset_path: build/app/outputs/flutter-apk/app-release.apk
         asset_name: app-release.apk
         asset_content_type: application/vnd.android.package-archive
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
