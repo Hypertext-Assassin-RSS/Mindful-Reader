@@ -16,6 +16,11 @@ jobs:
       with:
         flutter-version: '3.24.0'
 
+    - name: Set up .env file
+      run: |
+        mkdir -p assets/config
+        echo "BASE_URL=${{ secrets.BASE_URL }}" > assets/config/.env
+
     - name: Install dependencies
       run: flutter pub get
 
