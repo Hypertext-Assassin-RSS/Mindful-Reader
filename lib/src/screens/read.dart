@@ -16,6 +16,9 @@ class ReadBookScreen extends StatefulWidget {
 class _ReadBookScreenState extends State<ReadBookScreen> {
   String? localPath;
   bool isLoading = true;
+  int totalPages = 0;
+  int currentPage = 0;
+  PDFViewController? pdfViewController;
 
   @override
   void initState() {
@@ -45,6 +48,12 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     }
   }
 
+  void _jumpToPage(int pageNumber) {
+    if (pdfViewController != null && pageNumber >= 0 && pageNumber < totalPages) {
+      pdfViewController!.setPage(pageNumber);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,22 +61,74 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
         title: const Text('Read Book'),
         backgroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          if (!isLoading)
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Center(
+                child: Text('Page $currentPage of $totalPages'),
+              ),
+            ),
+        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : localPath != null
-              ? PDFView(
-                  filePath: localPath,
-                  enableSwipe: true,
-                  swipeHorizontal: true,
-                  autoSpacing: false,
-                  pageFling: false,
-                  onError: (error) {
-                    print('Error displaying PDF: $error');
-                  },
-                  onPageError: (page, error) {
-                    print('Error on page $page: $error');
-                  },
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: PDFView(
+                        filePath: localPath,
+                        enableSwipe: true,
+                        swipeHorizontal: true,
+                        autoSpacing: false,
+                        pageFling: false,
+                        onViewCreated: (PDFViewController vc) {
+                          setState(() {
+                            pdfViewController = vc;
+                          });
+                        },
+                        onRender: (pages) {
+                          setState(() {
+                            totalPages = pages!;
+                          });
+                        },
+                        onPageChanged: (page, total) {
+                          setState(() {
+                            currentPage = page!;
+                          });
+                        },
+                        onError: (error) {
+                          print('Error displaying PDF: $error');
+                        },
+                        onPageError: (page, error) {
+                          print('Error on page $page: $error');
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const Text('Go page:'),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                            width: 50,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              onSubmitted: (value) {
+                                int page = int.tryParse(value) ?? 0;
+                                _jumpToPage(page);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 )
               : const Center(child: Text('Failed to load PDF')),
     );
