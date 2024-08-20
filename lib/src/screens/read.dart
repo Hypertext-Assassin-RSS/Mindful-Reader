@@ -54,6 +54,18 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     }
   }
 
+  void _nextPage() {
+    if (pdfViewController != null && currentPage < totalPages - 1) {
+      pdfViewController!.setPage(currentPage + 1);
+    }
+  }
+
+  void _previousPage() {
+    if (pdfViewController != null && currentPage > 0) {
+      pdfViewController!.setPage(currentPage - 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,20 +122,28 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          const Text('Go page:'),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: _previousPage,
+                          ),
                           const SizedBox(width: 10),
-                          SizedBox(
-                            width: 50,
+                          Expanded(
                             child: TextField(
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
+                                labelText: 'Go page',
                               ),
                               onSubmitted: (value) {
                                 int page = int.tryParse(value) ?? 0;
                                 _jumpToPage(page);
                               },
                             ),
+                          ),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward),
+                            onPressed: _nextPage,
                           ),
                         ],
                       ),
