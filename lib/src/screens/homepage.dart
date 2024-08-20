@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'banner.dart';
 import 'category.dart';
 import 'itemcards.dart';
 import 'trends.dart';
 import 'details.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,8 +28,9 @@ class _HomePageState extends State<HomePage> {
   }
 
 Future<void> fetchBooks() async {
+  await dotenv.load(fileName: "assets/config/.env");
   try {
-    final response = await Dio().get('http://192.168.56.1:5000/api/books'); // Replace with your server URL
+    final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
     if (response.statusCode == 200) {
       if (mounted) {
         setState(() {
