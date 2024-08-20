@@ -26,7 +26,7 @@ class BannerSection extends StatelessWidget {
       message = 'Warm Night!';
     }
 
-    String imageUrl = book['formats']['image/jpeg'] ?? 'assets/images/placeholder.png';
+    String imageUrl = book['cover_url'] ?? 'assets/images/imgae_not.jpg';
     String title = book['title'] ?? 'Unknown Title';
     String author = book['authors'] != null && book['authors'].isNotEmpty
         ? book['authors'][0]['name']
