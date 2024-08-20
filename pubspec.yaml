@@ -44,4 +44,4 @@ flutter:
     - assets/icons/
     - assets/books.json
     - assets/great_gatsby.pdf
-    - assets/config/.env
+    - assets/config/
