@@ -118,7 +118,7 @@ class BannerSection extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
-                                  color: KFifthColor,
+                                  color: KFourthColor,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -129,7 +129,7 @@ class BannerSection extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
-                                  color: KFifthColor.withOpacity(0.7),
+                                  color: KFourthColor.withOpacity(0.7),
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
