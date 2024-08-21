@@ -65,7 +65,7 @@ class SettingsMenu extends StatelessWidget {
       height: 50,
       width: 250,
       decoration: BoxDecoration(
-        color: KPrimaryColor,
+        color: const Color(0xffffffff),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -74,16 +74,16 @@ class SettingsMenu extends StatelessWidget {
           children: [
             SvgPicture.asset(
               svg,
-              color: KFifthColor,
+              color: KFourthColor,
               fit: BoxFit.scaleDown,
             ),
             const SizedBox(width: 20),
             Text(
               text1,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: KFifthColor.withOpacity(0.6),
+                color: KFourthColor,
               ),
             )
           ],
