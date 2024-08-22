@@ -64,8 +64,8 @@ Widget build(BuildContext context) {
       child: Column(
         children: [
           isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : BannerSection(book: randomBook),
+          ? const Center(child: CircularProgressIndicator())
+          : BannerSection(book: randomBook ?? {}),
           const SizedBox(height: 5),
           const CategoryCard(),
           const SizedBox(height: 5),
