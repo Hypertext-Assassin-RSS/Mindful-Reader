@@ -1,10 +1,9 @@
 
-<center> 
+<div style="text-align: center;"> 
+    <h2>Mindful-Reader</h2>
+    <img src="assets/images/Mindful-Reader.png" width="200" height="200">
+</div>
 
-## Mindful-Reader
-<img src="assets/images/Mindful-Reader.png" width="200" height="200">
-
-</center>
 
 
 <br>
