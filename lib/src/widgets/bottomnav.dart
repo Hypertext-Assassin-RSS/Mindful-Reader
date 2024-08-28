@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import '../colors/color.dart';
 import '../screens/homepage.dart';
 import '../screens/profile.dart';
+import '../screens/explore.dart';
 
 
 class BottomNavBar extends StatefulWidget {
@@ -16,6 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int currentIndex = 0;
   final screens = [
     const HomePage(),
+    const ExploreScreen(),
     const Profile(),
   ];
 
@@ -36,6 +38,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 color: KFourthColor,
               ),
               label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/search.svg',
+                color: KFourthColor,
+              ),
+              label: 'Explore',
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
