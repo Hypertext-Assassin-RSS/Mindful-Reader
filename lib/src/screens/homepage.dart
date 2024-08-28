@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -47,7 +48,9 @@ class _HomePageState extends State<HomePage> {
           isLoading = false;
         });
       }
-      print('Error fetching books: $e');
+      if (kDebugMode) {
+        print('Error fetching books: $e');
+      }
     }
   }
 
