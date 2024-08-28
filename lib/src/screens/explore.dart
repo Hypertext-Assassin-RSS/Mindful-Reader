@@ -92,6 +92,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Scaffold is a layout for
+    // the major Material Components.
     return Scaffold(
       appBar: AppBar(
         title: _isSearchVisible
