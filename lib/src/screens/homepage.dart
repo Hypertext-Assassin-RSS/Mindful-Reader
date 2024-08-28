@@ -27,29 +27,29 @@ class _HomePageState extends State<HomePage> {
     fetchBooks();
   }
 
-Future<void> fetchBooks() async {
-  await dotenv.load(fileName: "assets/config/.env");
-  try {
-    final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
-    if (response.statusCode == 200) {
+  Future<void> fetchBooks() async {
+    await dotenv.load(fileName: "assets/config/.env");
+    try {
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
+      if (response.statusCode == 200) {
+        if (mounted) {
+          setState(() {
+            books = response.data;
+            isLoading = false;
+          });
+        }
+      } else {
+        throw Exception('Failed to load books');
+      }
+    } catch (e) {
       if (mounted) {
         setState(() {
-          books = response.data;
           isLoading = false;
         });
       }
-    } else {
-      throw Exception('Failed to load books');
+      print('Error fetching books: $e');
     }
-  } catch (e) {
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
-    }
-    print('Error fetching books: $e');
   }
-}
 
 
 
