@@ -13,52 +13,105 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 20),
-          child: Center(
-            child: SafeArea(
-              child: Text(
-                'Settings',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: KFourthColor,
-                ),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              'Profile',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                color: KFourthColor,
               ),
             ),
-          ),
+            const SizedBox(height: 40),
+            Center(
+              child: Column(
+                children: [
+                  // Profile Picture
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: KFourthColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('assets/images/profile.png'), // Replace with your profile picture
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    'Rajith Sanjaya',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: KFourthColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    '0767898789',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: KFourthColor,
+                    ),
+                  ),
+                  const Text(
+                    'RajithSanjaya@gmail.com',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: KFourthColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+            // Profile Options
+            Expanded(
+              child: ListView(
+                children: [
+                  ProfileMenu(
+                    svg: 'assets/icons/history.svg',
+                    text1: 'Order History',
+                  ),
+                  ProfileMenu(
+                    svg: 'assets/icons/address.svg',
+                    text1: 'Shipping Address',
+                  ),
+                  ProfileMenu(
+                    svg: 'assets/icons/privacy.svg',
+                    text1: 'Privacy Policy',
+                  ),
+                  ProfileMenu(
+                    svg: 'assets/icons/settings.svg',
+                    text1: 'Settings',
+                  ),
+                  ProfileMenu(
+                    svg: 'assets/icons/contact.svg',
+                    text1: 'Contact Us',
+                  ),
+                  ProfileMenu(
+                    svg: 'assets/icons/logout.svg',
+                    text1: 'Log out',
+                    isLogout: true,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        SizedBox(height: 70),
-        SettingsMenu(
-          svg: 'assets/icons/settings.svg',
-          text1: 'Profile Settings',
-        ),
-        SizedBox(height: 20),
-        SettingsMenu(
-          svg: 'assets/icons/notification.svg',
-          text1: 'Notification',
-        ),
-        SizedBox(height: 20),
-        SettingsMenu(
-          svg: 'assets/icons/security.svg',
-          text1: 'Privacy & Security',
-        ),
-        SizedBox(height: 20),
-        SettingsMenu(
-          svg: 'assets/icons/back.svg',
-          text1: 'Logout',
-          isLogout: true,
-        ),
-      ],
-    ));
+      ),
+    );
   }
 }
 
-class SettingsMenu extends StatelessWidget {
-  const SettingsMenu({
+class ProfileMenu extends StatelessWidget {
+  const ProfileMenu({
     super.key,
     required this.svg,
     required this.text1,
@@ -75,31 +128,45 @@ class SettingsMenu extends StatelessWidget {
       onTap: isLogout ? () => _showLogoutConfirmation(context) : null,
       child: Container(
         height: 50,
-        width: 250,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 255, 255, 255),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                svg,
-                color: KFourthColor,
-                fit: BoxFit.scaleDown,
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              svg,
+              color: KFourthColor,
+              fit: BoxFit.scaleDown,
+              width: 20,
+              height: 20,
+            ),
+            const SizedBox(width: 20),
+            Text(
+              text1,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: KFourthColor.withOpacity(0.8),
               ),
-              const SizedBox(width: 20),
-              Text(
-                text1,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: KFourthColor.withOpacity(0.6),
-                ),
-              )
-            ],
-          ),
+            ),
+            const Spacer(),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: KFourthColor,
+            ),
+          ],
         ),
       ),
     );
