@@ -48,11 +48,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                'assets/icons/profile.svg',
+                'assets/icons/user-solid.svg',
                 color: KFourthColor,
+                width: 16,
+                height: 19,
               ),
               label: 'Profile',
-            ),
+            ),  
           ]),
     );
   }
