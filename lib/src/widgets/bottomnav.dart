@@ -52,6 +52,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
               icon: SvgPicture.asset(
                 'assets/icons/bookmark.svg',
                 color: KFourthColor,
+                width: 16,
+                height: 19,
               ),
               label: 'Bookmarks',
             ),

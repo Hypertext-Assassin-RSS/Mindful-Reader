@@ -32,7 +32,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter_launcher_icons:
-  android: "launcher_icon"
   ios: true
   image_path: "assets/images/Mindful-Reader.png"
   # image_path: "assets/images/Mindful-Reader.png"
