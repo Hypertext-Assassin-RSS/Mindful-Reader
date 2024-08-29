@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="assets/images/Mindful-Reader.png" width="220">
+  <img src="assets/images/Mindful-Reader-Round.png" width="220">
   <br>
   <b>Mindful-Reader</b>
   <br>
