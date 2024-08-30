@@ -27,21 +27,13 @@ class PageScaffold extends StatefulWidget {
 
 class _PageScaffoldState extends State<PageScaffold> {
   final List<String> categories = ["All", "Unread", "Favorites", "Archived"];
-  List<dynamic> books = [
-    // Sample book data
-    
-    // Add more books as needed
-  ];
+  List<Book> books = [];
   bool isLoading = true;
 
-    @override
+  @override
   void initState() {
     super.initState();
-
-    if(books.isEmpty){
-      fetchBooks();
-      debugPrint('Books Available');
-    }
+    fetchBooks();
   }
 
   Future<void> fetchBooks() async {
@@ -51,7 +43,9 @@ class _PageScaffoldState extends State<PageScaffold> {
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            books = response.data.map((bookJson) => Book.fromJson(bookJson)).toList();
+            books = (response.data as List)
+                .map((bookJson) => Book.fromJson(bookJson))
+                .toList();
             isLoading = false;
           });
         }
@@ -98,7 +92,7 @@ class _PageScaffoldState extends State<PageScaffold> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -106,22 +100,28 @@ class _PageScaffoldState extends State<PageScaffold> {
                     'Featured Books',
                     style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 4.0),
                   isLoading
                       ? const Center(child: CupertinoActivityIndicator())
-                      : BookListWidget(books: books), // Use the reusable widget
+                      : BookListWidget(books: books),
                 ],
               ),
             ),
           ),
-          const SliverFillRemaining(
-            child: Center(
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Welcome to Home Page'),
-                  SizedBox(height: 20.0),
-                  Text('Enjoy your stay!'),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Top Free',
+                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4.0),
+                  isLoading
+                      ? const Center(child: CupertinoActivityIndicator())
+                      : BookListWidget(books: books),
                 ],
               ),
             ),

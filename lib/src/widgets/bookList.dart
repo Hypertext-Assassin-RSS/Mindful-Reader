@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mindful_reader/src/models/book.dart';
 
 class BookListWidget extends StatelessWidget {
   final List<dynamic> books;
@@ -13,7 +12,7 @@ class BookListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300.0,
+      height: 220.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: books.length,
