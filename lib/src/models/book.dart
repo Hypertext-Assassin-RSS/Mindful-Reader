@@ -4,6 +4,7 @@ class Book {
   final String author;
   final String description;
   final String bookUrl;
+  final String rating;
 
   Book({
     required this.imageUrl,
@@ -11,6 +12,7 @@ class Book {
     required this.author,
     required this.description,
     required this.bookUrl,
+    required this.rating,
   });
 
   // Factory constructor to create a Book instance from JSON
@@ -21,6 +23,7 @@ class Book {
       author: json['author'] ?? 'Unknown Author',
       description: json['description'] ?? 'No description available.',
       bookUrl: json['pdf_url'] ?? '',
+      rating: json['rating'] ?? '0',
     );
   }
 }

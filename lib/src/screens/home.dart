@@ -68,9 +68,19 @@ class _PageScaffoldState extends State<PageScaffold> {
     print('Selected category: $category');
   }
 
+  Color _getBackgroundColor(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    if (brightness == Brightness.dark) {
+      return CupertinoColors.black;
+    } else {
+      return CupertinoColors.white;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: _getBackgroundColor(context),
       child: CustomScrollView(
         slivers: <Widget>[
           const CupertinoSliverNavigationBar(
