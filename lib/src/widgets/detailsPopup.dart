@@ -8,7 +8,6 @@ class BookDetailsPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color backgroundColor = CupertinoTheme.of(context).scaffoldBackgroundColor;
 
     return CupertinoActionSheet(
       message: ConstrainedBox(
@@ -156,12 +155,15 @@ class BookDetailsPopup extends StatelessWidget {
           ],
         ),
       ),
-      cancelButton: CupertinoButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: const Text("Close"),
-      ),
+      actions: <CupertinoActionSheetAction> [
+        CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Close'),
+          ),
+      ],
     );
   }
 
@@ -177,7 +179,7 @@ class BookDetailsPopup extends StatelessWidget {
                 fontSize: 12.0,
               ),
             ),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 4.0),
             Text(value,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
