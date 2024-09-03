@@ -29,6 +29,8 @@ dependencies:
   screen_protector: ^1.4.2+1
   cupertino_icons: ^1.0.8
   super_cupertino_navigation_bar: ^2.1.2
+  turn_page_transition: ^0.3.0
+  alh_pdf_view: ^2.0.1
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
