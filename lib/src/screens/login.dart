@@ -1,9 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:mindful_reader/src/widgets/bottomnav.dart';
+import 'package:mindful_reader/src/widgets/bottomTabBar.dart';
+
 
 // Import the HomeScreen
 
@@ -26,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     // Navigate to the HomeScreen when the login button is pressed
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const BottomNavBar()),
+      MaterialPageRoute(builder: (context) => const BottomTabBar()),
     );
   }
 
