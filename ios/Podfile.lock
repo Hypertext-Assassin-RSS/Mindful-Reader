@@ -1,10 +1,19 @@
 PODS:
+  - alh_pdf_view_ios (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_pdfview (1.0.2):
     - Flutter
+  - "no_screenshot (0.0.1+4)":
+    - Flutter
+    - ScreenProtectorKit (~> 1.3.1)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - screen_protector (1.2.1):
+    - Flutter
+    - ScreenProtectorKit (~> 1.3.1)
+  - ScreenProtectorKit (1.3.1)
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -12,28 +21,45 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - alh_pdf_view_ios (from `.symlinks/plugins/alh_pdf_view_ios/ios`)
   - Flutter (from `Flutter`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
+  - no_screenshot (from `.symlinks/plugins/no_screenshot/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - screen_protector (from `.symlinks/plugins/screen_protector/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
+SPEC REPOS:
+  trunk:
+    - ScreenProtectorKit
+
 EXTERNAL SOURCES:
+  alh_pdf_view_ios:
+    :path: ".symlinks/plugins/alh_pdf_view_ios/ios"
   Flutter:
     :path: Flutter
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
+  no_screenshot:
+    :path: ".symlinks/plugins/no_screenshot/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  screen_protector:
+    :path: ".symlinks/plugins/screen_protector/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  alh_pdf_view_ios: 783c3f58446704b8e394efbe43ee58bfd0fec074
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
+  no_screenshot: 67d110f12466f4913b488803d4e498d03ef2889e
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  screen_protector: 6f92086bd2f2f4b54f54913289b9d1310610140b
+  ScreenProtectorKit: 83a6281b02c7a5902ee6eac4f5045f674e902ae4
   video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
