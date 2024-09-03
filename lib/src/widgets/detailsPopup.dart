@@ -34,7 +34,7 @@ class BookDetailsPopup extends StatelessWidget {
           maxHeight: MediaQuery.of(context).size.height * 0.9,
         ),
         padding: const EdgeInsets.all(16.0),
-        color: _getBackgroundColor(context), // Set the background color here
+        color: _getBackgroundColor(context).withOpacity(0.9), // Set the background color here
         child: Stack(
           children: [
             Column(
