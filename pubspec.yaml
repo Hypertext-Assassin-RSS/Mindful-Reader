@@ -31,6 +31,7 @@ dependencies:
   super_cupertino_navigation_bar: ^2.1.2
   turn_page_transition: ^0.3.0
   alh_pdf_view: ^2.0.1
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
