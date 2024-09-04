@@ -29,6 +29,7 @@ class PageScaffold extends StatefulWidget {
 class _PageScaffoldState extends State<PageScaffold> {
   final List<String> categories = ["All", "Unread", "Favorites", "Archived"];
   List<Book> books = [];
+  List<String> sliderImages = [];
   bool isLoading = true;
 
   int _current = 0;
@@ -38,6 +39,7 @@ class _PageScaffoldState extends State<PageScaffold> {
   void initState() {
     super.initState();
     fetchBooks();
+    fetchSliderImages();
   }
 
   Future<void> fetchBooks() async {
@@ -68,8 +70,32 @@ class _PageScaffoldState extends State<PageScaffold> {
     }
   }
 
-  void _onCategorySelected(String category) {
-    print('Selected category: $category');
+  Future<void> fetchSliderImages() async {
+    await dotenv.load(fileName: "assets/config/.env");
+    try {
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/sliders/slider-images');
+      if (response.statusCode == 200) {
+        if (mounted) {
+          setState(() {
+            sliderImages = (response.data as List)
+                .map((sliderJson) => sliderJson['imageUrl'] as String)
+                .toList();
+            isLoading = false;
+          });
+        }
+      } else {
+        throw Exception('Failed to load slider images');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      if (kDebugMode) {
+        print('Error fetching slider images: $e');
+      }
+    }
   }
 
   Color _getBackgroundColor(BuildContext context) {
@@ -97,7 +123,7 @@ class _PageScaffoldState extends State<PageScaffold> {
           ),
           SliverToBoxAdapter(
             child: CarouselSlider(
-              items: books.map((book) {
+              items: sliderImages.map((imageUrl) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
@@ -105,7 +131,7 @@ class _PageScaffoldState extends State<PageScaffold> {
                       margin: const EdgeInsets.symmetric(horizontal: 5.0),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(book.imageUrl),
+                          image: NetworkImage(imageUrl),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
@@ -130,7 +156,7 @@ class _PageScaffoldState extends State<PageScaffold> {
           SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: books.asMap().entries.map((entry) {
+              children: sliderImages.asMap().entries.map((entry) {
                 return GestureDetector(
                   onTap: () => _carouselController.animateToPage(entry.key),
                   child: Container(
@@ -149,15 +175,6 @@ class _PageScaffoldState extends State<PageScaffold> {
               }).toList(),
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //     child: CategorySelector(
-          //       categories: categories,
-          //       onCategorySelected: _onCategorySelected,
-          //     ),
-          //   ),
-          // ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -199,3 +216,4 @@ class _PageScaffoldState extends State<PageScaffold> {
     );
   }
 }
+
