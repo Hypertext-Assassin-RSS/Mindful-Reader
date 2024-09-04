@@ -31,10 +31,10 @@ class BookDetailsPopup extends StatelessWidget {
       isSurfacePainted: true,
       child: Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.9,
+          maxHeight: MediaQuery.of(context).size.height * 0.95,
         ),
         padding: const EdgeInsets.all(16.0),
-        color: _getBackgroundColor(context).withOpacity(0.9), // Set the background color here
+        color: _getBackgroundColor(context).withOpacity(0.9),
         child: Stack(
           children: [
             Column(
@@ -93,7 +93,7 @@ class BookDetailsPopup extends StatelessWidget {
                             size: 24.0,
                             color: brightness == Brightness.dark
                                 ? Colors.yellow
-                                : Colors.black, // Adjust icon color for contrast
+                                : Colors.black, 
                           ),
                           const SizedBox(width: 4.0),
                           RichText(
@@ -103,7 +103,7 @@ class BookDetailsPopup extends StatelessWidget {
                                 fontSize: 18.0,
                                 color: brightness == Brightness.dark
                                     ? Colors.white
-                                    : Colors.black, // Adjust text color for contrast
+                                    : Colors.black, 
                               ),
                             ),
                           ),
@@ -214,7 +214,7 @@ class BookDetailsPopup extends StatelessWidget {
                           fontSize: 16.0,
                           color: brightness == Brightness.dark
                               ? Colors.white70
-                              : Colors.black87, // Adjust text color for contrast
+                              : Colors.black87,
                         ),
                       ),
                     ),
@@ -232,13 +232,13 @@ class BookDetailsPopup extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildChipWithBar(
-                          'Size', '100 MB', brightness), // Pass brightness
+                          'Size', '100 MB', brightness),
                       _buildChipWithBar(
-                          'Pages', '169 Pages', brightness), // Pass brightness
+                          'Pages', '169 Pages', brightness),
                       _buildChipWithBar(
-                          'Category', 'Story', brightness), // Pass brightness
+                          'Category', 'Story', brightness),
                       _buildChipWithBar('Published', '2024/09/02',
-                          brightness), // Pass brightness
+                          brightness),
                     ],
                   ),
                 ),
@@ -280,11 +280,11 @@ class BookDetailsPopup extends StatelessWidget {
               text: TextSpan(
                 text: title,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   fontSize: 12.0,
                   color: brightness == Brightness.dark
                       ? Colors.white
-                      : Colors.black, // Adjust text color for contrast
+                      : Colors.black, 
                 ),
               ),
             ),
@@ -295,10 +295,10 @@ class BookDetailsPopup extends StatelessWidget {
                 text: value,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
+                  fontSize: 15.0,
                   color: brightness == Brightness.dark
                       ? Colors.white
-                      : Colors.black, // Adjust text color for contrast
+                      : Colors.black, 
                 ),
               ),
             ),
