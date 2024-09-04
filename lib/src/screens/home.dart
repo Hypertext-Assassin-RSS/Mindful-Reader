@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mindful_reader/src/models/book.dart';
 import 'package:mindful_reader/src/widgets/bookList.dart';
-import 'package:mindful_reader/src/widgets/categorySelector.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mindful_reader/src/widgets/categorySelector.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -22,6 +23,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  final List<String> categories = ["All", "Unread", "Favorites", "Archived"];
 
   Color _getBackgroundColor(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -30,6 +32,10 @@ class _SearchState extends State<Search> {
     } else {
       return CupertinoColors.white;
     }
+  }
+
+    void _onCategorySelected(String category) {
+    print('Selected category: $category');
   }
 
   Color _getTextColor(BuildContext context) {
@@ -77,11 +83,13 @@ class _SearchState extends State<Search> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              
-            ],
-          ),
+          child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: CategorySelector(
+                    categories: categories,
+                    onCategorySelected: _onCategorySelected,
+                  ),
+                ),
         ),
       ),
     );
