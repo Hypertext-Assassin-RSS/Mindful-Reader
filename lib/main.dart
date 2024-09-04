@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'src/screens/login.dart';
-// ignore: unused_import
-import 'package:mindful_reader/src/widgets/bottomnav.dart';
+import 'package:mindful_reader/src/widgets/bottomTabBar.dart';
 import './src/colors/color.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: KFifthColor
       ),
       // home: const BottomNavBar(),
-      home: const LoginScreen(),
+      home: const BottomTabBar(),
     );
   }
 }

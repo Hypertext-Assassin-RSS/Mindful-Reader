@@ -25,6 +25,13 @@ dependencies:
   flutter_pdfview: ^1.3.2
   path_provider: ^2.1.4
   flutter_dotenv: ^5.1.0
+  no_screenshot: ^0.3.1
+  screen_protector: ^1.4.2+1
+  cupertino_icons: ^1.0.8
+  super_cupertino_navigation_bar: ^2.1.2
+  turn_page_transition: ^0.3.0
+  alh_pdf_view: ^2.0.1
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

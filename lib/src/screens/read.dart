@@ -3,6 +3,9 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'package:no_screenshot/no_screenshot.dart';
+
+
 
 class ReadBookScreen extends StatefulWidget {
   final String bookUrl;
@@ -14,17 +17,28 @@ class ReadBookScreen extends StatefulWidget {
 }
 
 class _ReadBookScreenState extends State<ReadBookScreen> {
+  final noScreenshot = NoScreenshot.instance;
+
+  
   String? localPath;
   bool isLoading = true;
   int totalPages = 0;
   int currentPage = 0;
   PDFViewController? pdfViewController;
 
+
+
+
+
   @override
   void initState() {
     super.initState();
+    noScreenshot.screenshotOff();
     _downloadAndSavePDF();
   }
+
+  
+
 
   Future<void> _downloadAndSavePDF() async {
     try {
