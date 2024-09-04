@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:mindful_reader/src/screens/bookmark.dart';
-import 'package:mindful_reader/src/screens/explore.dart';
 import 'package:mindful_reader/src/screens/home.dart';
 import 'package:mindful_reader/src/screens/profile.dart';
+import 'package:mindful_reader/src/screens/search.dart';
 
 class BottomTabBar extends StatefulWidget {
   const BottomTabBar({super.key});
@@ -16,7 +16,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
   int currentIndex = 0;
   final screens = [
     const Home(),
-    const ExploreScreen(),
+    const Search(),
     const Bookmark(),
     const Profile(),
   ];
