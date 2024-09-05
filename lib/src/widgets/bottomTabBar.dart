@@ -16,7 +16,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
   int currentIndex = 0;
   final screens = [
     const Home(),
-    const Search(),
+    const SearchScreen(),
     const Bookmark(),
     const Profile(),
   ];

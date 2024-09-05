@@ -13,10 +13,6 @@ class CategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = MediaQuery.of(context).platformBrightness;
-    final backgroundColor = brightness == Brightness.dark
-        ? CupertinoColors.darkBackgroundGray.withOpacity(0.9)
-        : CupertinoColors.lightBackgroundGray.withOpacity(0.9);
 
     return SizedBox(
       height: 40.0,

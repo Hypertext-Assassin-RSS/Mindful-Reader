@@ -31,6 +31,7 @@ class _SearchState extends State<Search> {
   List<Book> filteredBooks = [];
   bool isLoading = true;
   String searchQuery = "";
+  String selectedCategory = "All";
 
   @override
   void initState() {
@@ -65,27 +66,20 @@ class _SearchState extends State<Search> {
     }
   }
 
-  Color _getBackgroundColor(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    return brightness == Brightness.dark ? CupertinoColors.black : CupertinoColors.white;
-  }
+  void _filterBooks(String query, String category) {
+    setState(() {
+      searchQuery = query.toLowerCase();
+      selectedCategory = category;
 
-  Color _getTextColor(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    return brightness == Brightness.dark ? CupertinoColors.white : CupertinoColors.black;
+      filteredBooks = books.where((book) {
+        final matchesQuery = book.title.toLowerCase().contains(searchQuery);
+        return matchesQuery;
+      }).toList();
+    });
   }
 
   void _onCategorySelected(String category) {
-    print('Selected category: $category');
-  }
-
-  void _filterBooks(String query) {
-    setState(() {
-      searchQuery = query.toLowerCase();
-      filteredBooks = books.where((book) {
-        return book.title.toLowerCase().contains(searchQuery);
-      }).toList();
-    });
+    _filterBooks(searchQuery, category);
   }
 
   @override
@@ -120,10 +114,13 @@ class _SearchState extends State<Search> {
               color: _getTextColor(context),
             ),
             onChanged: (query) {
-              _filterBooks(query);
+              _filterBooks(query, selectedCategory);
+              if (query.isEmpty) {
+                _filterBooks("", selectedCategory);
+              }
             },
             onSubmitted: (query) {
-              _filterBooks(query);
+              _filterBooks(query, selectedCategory);
             },
           ),
         ),
@@ -131,13 +128,14 @@ class _SearchState extends State<Search> {
             ? const Center(child: CupertinoActivityIndicator())
             : SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       CategorySelector(
                         categories: categories,
                         onCategorySelected: _onCategorySelected,
                       ),
+                      const SizedBox(height: 20),
                       GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -146,7 +144,7 @@ class _SearchState extends State<Search> {
                           crossAxisCount: 2,
                           childAspectRatio: 0.65,
                           crossAxisSpacing: 24,
-                          mainAxisSpacing: 24,
+                          mainAxisSpacing: 24, 
                         ),
                         itemBuilder: (BuildContext context, int index) {
                           Book book = filteredBooks[index];
@@ -175,5 +173,15 @@ class _SearchState extends State<Search> {
               ),
       ),
     );
+  }
+
+  Color _getBackgroundColor(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    return brightness == Brightness.dark ? CupertinoColors.black : CupertinoColors.white;
+  }
+
+  Color _getTextColor(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    return brightness == Brightness.dark ? CupertinoColors.white : CupertinoColors.black;
   }
 }
