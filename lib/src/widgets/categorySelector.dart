@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CategorySelector extends StatelessWidget {
   final List<String> categories;
@@ -27,14 +28,20 @@ class CategorySelector extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: CupertinoButton(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              color: backgroundColor,
+              color: (MediaQuery.of(context).platformBrightness == Brightness.dark
+                          ? Colors.grey.withOpacity(0.9)
+                          : Colors.grey.withOpacity(0.9)),
               borderRadius: BorderRadius.circular(20.0),
               onPressed: () {
                 onCategorySelected(categories[index]);
               },
               child: Text(
                 categories[index],
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: TextStyle(
+                  color: (MediaQuery.of(context).platformBrightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.black)
+                ),
               ),
             ),
           );
