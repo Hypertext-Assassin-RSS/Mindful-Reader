@@ -26,11 +26,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   void initState() {
     super.initState();
-    fetchBooks();
+    if (books.isEmpty) {
+      fetchBooks();
+    }
     _searchController.addListener(_filterBooks);
   }
 
   Future<void> fetchBooks() async {
+    debugPrint('Getting Books');
     await dotenv.load(fileName: "assets/config/.env");
     try {
       final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');

@@ -25,10 +25,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchBooks();
+    if(books.isEmpty){
+      debugPrint(books.isEmpty.toString());
+      fetchBooks();
+    }
   }
 
   Future<void> fetchBooks() async {
+    debugPrint('Getting Books');
     await dotenv.load(fileName: "assets/config/.env");
     try {
       final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
