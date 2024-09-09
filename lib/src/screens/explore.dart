@@ -146,6 +146,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   author: book['author'] ?? 'Unknown Author',
                                   description: book['description'] ?? 'No description available.',
                                   bookUrl: book['pdf_url'],
+                                  isBookmarked: book['bookmarked'] ?? false,
                                 ),
                               ),
                             );
@@ -177,6 +178,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   author: book['author'] ?? 'Unknown Author',
                                   description: book['description'] ?? 'No description available.',
                                   bookUrl: book['pdf_url'],
+                                  isBookmarked: book['bookmarked'] ?? false,
                                 ),
                               ),
                             );

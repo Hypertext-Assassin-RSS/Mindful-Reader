@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // Save the JWT token in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
+        await prefs.setString('username', username);
 
         ScaffoldMessenger.of(context).showMaterialBanner(
           MaterialBanner(
