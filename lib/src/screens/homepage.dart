@@ -5,10 +5,10 @@ import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'banner.dart';
-import 'category.dart';
+import '../widgets/category.dart';
 import 'itemcards.dart';
 import 'trends.dart';
-import 'details.dart';
+import '../widgets/details.dart';
 
 
 class HomePage extends StatefulWidget {

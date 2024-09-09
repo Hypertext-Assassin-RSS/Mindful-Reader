@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../colors/color.dart';
 
@@ -15,8 +15,8 @@ class CategoryCard extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            CupertinoButton(
-              onPressed: () {  },
+            InkWell(
+              onTap: () {},
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
@@ -36,8 +36,8 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            CupertinoButton(
-              onPressed: () {  },
+            InkWell(
+              onTap: () {},
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
@@ -57,8 +57,8 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            CupertinoButton(
-              onPressed: () {  },
+            InkWell(
+              onTap: () {},
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
@@ -78,8 +78,8 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            CupertinoButton(
-              onPressed: () {  },
+            InkWell(
+              onTap: () {},
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
@@ -99,8 +99,8 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            CupertinoButton(
-              onPressed: () {  },
+            InkWell(
+              onTap: () {},
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
@@ -120,8 +120,8 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            CupertinoButton(
-              onPressed: () {  },
+            InkWell(
+              onTap: () {},
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
