@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../colors/color.dart';
@@ -34,14 +35,16 @@ class Trends extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 5, left: 200),
-          child: Text(
-            'See all',
+        Padding(
+          padding: const EdgeInsets.only(top: 5, left: 200),
+          child: CupertinoButton(
+            onPressed: () {  }, 
+            child: const Text('See all',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: KFifthColor,
+              color: KFourthColor,
+            )
             ),
           ),
         )
