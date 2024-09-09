@@ -17,6 +17,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLogin = true;
+  bool _passwordVisible = false; // Toggle password visibility
+  bool _confirmPasswordVisible = false; // For confirm password
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -28,8 +30,40 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  // Input validation: Check if any field is empty
+  bool _validateInputs() {
+    if (isLogin) {
+      if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')),
+        );
+        return false;
+      }
+    } else {
+      if (_usernameController.text.isEmpty ||
+          _emailController.text.isEmpty ||
+          _passwordController.text.isEmpty ||
+          _confirmPasswordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')),
+        );
+        return false;
+      }
+
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+
   // Perform Login
   Future<void> _login() async {
+    if (!_validateInputs()) return; // Validate inputs first
+
     final username = _usernameController.text;
     final password = _passwordController.text;
     await dotenv.load(fileName: "assets/config/.env");
@@ -88,18 +122,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Perform Signup
   Future<void> _signup() async {
+    if (!_validateInputs()) return; // Validate inputs first
+
     final username = _usernameController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
     await dotenv.load(fileName: "assets/config/.env");
-
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
 
     try {
       final response = await http.post(
@@ -202,18 +231,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: _buildTextField('Password', true, _passwordController)
-                    .animate()
-                    .fadeIn(duration: 900.ms),
+                child: _buildPasswordTextField(
+                  'Password', 
+                  _passwordController, 
+                  _passwordVisible,
+                  () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  }
+                ).animate().fadeIn(duration: 900.ms),
               ),
 
               if (!isLogin) ...[
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: _buildTextField('Confirm Password', true, _confirmPasswordController)
-                      .animate()
-                      .fadeIn(duration: 1000.ms),
+                  child: _buildPasswordTextField(
+                    'Confirm Password', 
+                    _confirmPasswordController, 
+                    _confirmPasswordVisible, 
+                    () {
+                      setState(() {
+                        _confirmPasswordVisible = !_confirmPasswordVisible;
+                      });
+                    }
+                  ).animate().fadeIn(duration: 1000.ms),
                 ),
               ],
 
@@ -281,6 +324,33 @@ class _LoginScreenState extends State<LoginScreen> {
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+      ),
+    );
+  }
+
+  // Build a text field with password visibility toggle
+  Widget _buildPasswordTextField(String hint, TextEditingController controller, bool isVisible, VoidCallback toggleVisibility) {
+    return TextField(
+      controller: controller,
+      obscureText: !isVisible,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white54),
+        filled: true,
+        fillColor: Colors.grey[800],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        suffixIcon: IconButton(
+          icon: Icon(
+            isVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.white54,
+          ),
+          onPressed: toggleVisibility,
+        ),
       ),
     );
   }

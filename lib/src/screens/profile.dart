@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../colors/color.dart';
 import '../screens/login.dart';
-import 'package:flutter/cupertino.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -126,7 +125,7 @@ class ProfileMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLogout ? () => _showAlertDialog(context) : null,
+      onTap: isLogout ? () => _showLogoutConfirmation(context) : null,
       child: Container(
         height: 50,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -173,38 +172,30 @@ class ProfileMenu extends StatelessWidget {
     );
   }
 
-    void _showAlertDialog(BuildContext context) {
-    showCupertinoDialog<void>(
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
       context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            /// This parameter indicates this action is the default,
-            /// and turns the action's text to bold text.
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('No'),
-          ),
-          CupertinoDialogAction(
-            /// This parameter indicates the action would perform
-            /// a destructive action such as deletion, and turns
-            /// the action's text color to red.
-            isDestructiveAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-              _logout(context);
-            },
-            child: const Text('Yes'),
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Logout"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _logout(context);
+              },
+              child: const Text("Logout"),
+            ),
+          ],
+        );
+      },
     );
   }
-
 
   void _logout(BuildContext context) {
     Navigator.of(context).pushReplacement(
