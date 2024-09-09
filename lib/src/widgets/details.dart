@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../colors/color.dart';
 import '../screens/read.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String imageUrl;
@@ -8,6 +11,7 @@ class DetailsScreen extends StatefulWidget {
   final String author;
   final String description;
   final String bookUrl;
+  final bool isBookmarked;
 
   const DetailsScreen({
     super.key,
@@ -16,6 +20,7 @@ class DetailsScreen extends StatefulWidget {
     required this.author,
     required this.description,
     required this.bookUrl,
+    required this.isBookmarked,
   });
 
   @override
@@ -23,20 +28,60 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  bool isBookmarked = false; // Add a state variable for bookmarking
+  late bool isBookmarked;
 
-  // Toggle bookmark status
-  void _toggleBookmark() {
+  @override
+  void initState() {
+    super.initState();
+    isBookmarked = widget.isBookmarked;
+    debugPrint(widget.isBookmarked.toString());
+  }
+
+  Future<void> _toggleBookmark() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username') ?? '';
+    await dotenv.load(fileName: "assets/config/.env");
+
     setState(() {
       isBookmarked = !isBookmarked;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(isBookmarked ? 'Bookmarked!' : 'Removed from bookmarks'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    try {
+      if (isBookmarked) {
+        // Add bookmark
+        await Dio().post('${dotenv.env['API_BASE_URL']}/bookmarks/add',
+          data: {
+            'username': username,
+            'title': widget.title,
+          },
+        );
+        
+      } else {
+        await Dio().delete('${dotenv.env['API_BASE_URL']}/bookmarks/remove',
+        data: {
+          'username': username,
+          'title': widget.title,
+        },
+      );
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(isBookmarked ? 'Bookmarked!' : 'Removed from bookmarks'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    } catch (e) {
+      setState(() {
+        isBookmarked = !isBookmarked;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update bookmark status. Please try again.'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   @override
@@ -106,7 +151,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),
                   const SizedBox(width: 20),
-                  // Bookmark Button
                   InkWell(
                     onTap: _toggleBookmark,
                     child: Container(

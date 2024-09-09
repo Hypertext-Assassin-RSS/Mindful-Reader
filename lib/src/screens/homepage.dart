@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'banner.dart';
 import '../widgets/category.dart';
 import 'itemcards.dart';
 import 'trends.dart';
 import '../widgets/details.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,13 +21,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List books = [];
   bool isLoading = true;
+  String username = '';
+  Set<int> bookmarkedBookIds = Set();
 
   @override
   void initState() {
     super.initState();
-    if(books.isEmpty){
+    fetchUsernameAndBooks();
+  }
+
+  Future<void> fetchUsernameAndBooks() async {
+    final prefs = await SharedPreferences.getInstance();
+    username = prefs.getString('username') ?? '';
+    
+    if (books.isEmpty) {
       debugPrint(books.isEmpty.toString());
-      fetchBooks();
+      await fetchBooks();
     }
   }
 
@@ -39,6 +48,7 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
+            fetchBookmarks(response.data);
             books = response.data;
             isLoading = false;
           });
@@ -58,87 +68,119 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> fetchBookmarks(data) async {
+    
+    try {
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks',
+      data: {
+        "username":username
+      }
+      );
+      if (response.statusCode == 200) {
+        debugPrint(response.data.toString());
+        final bookmarks = response.data;
+        setState(() {
+          data.forEach((book) {
+            bookmarks.forEach((bookmark) {
+              if(book['title'] == bookmark['title'] ){
+                book['bookmarked'] = true;
+              };
+            });
+          });
+          return data;
+        });
+      } else {
+        debugPrint('Failed to load bookmarks');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching bookmarks: $e');
+      }
+    }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final random = Random();
+    final randomBook = books.isNotEmpty ? books[random.nextInt(books.length)] : null;
 
-@override
-Widget build(BuildContext context) {
-  final random = Random();
-  final randomBook = books.isNotEmpty ? books[random.nextInt(books.length)] : null;
-
-  return Scaffold(
-    body: SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : BannerSection(book: randomBook ?? {}),
-          const SizedBox(height: 5),
-          const CategoryCard(),
-          const SizedBox(height: 5),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: books.map((book) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                          imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                          title: book['title'] ?? 'Unknown Title',
-                          author: book['author'] ?? 'Unknown Author',
-                          description: book['description'] ?? 'No description available.', 
-                          bookUrl: book['pdf_url']
+    return Scaffold(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : BannerSection(book: randomBook ?? {}),
+            const SizedBox(height: 5),
+            const CategoryCard(),
+            const SizedBox(height: 5),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: books.map((book) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                            title: book['title'] ?? 'Unknown Title',
+                            author: book['author'] ?? 'Unknown Author',
+                            description: book['description'] ?? 'No description available.',
+                            bookUrl: book['pdf_url'],
+                            isBookmarked: book['bookmarked'] ?? false,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: ItemCards(
-                    imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                    text1: book['title'] ?? 'Unknown Title',
-                    text2: book['author'] ?? 'Unknown Author',
-                  ),
-                );
-              }).toList(),
+                      );
+                    },
+                    child: ItemCards(
+                      imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                      text1: book['title'] ?? 'Unknown Title',
+                      text2: book['author'] ?? 'Unknown Author',
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          const Trends(),
-          const SizedBox(height: 15),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: books.map((book) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                          imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                          title: book['title'] ?? 'Unknown Title',
-                          author: book['author'] ?? 'Unknown Author',
-                          description: book['description'] ?? 'No description available.', 
-                          bookUrl: book['pdf_url']
+            const SizedBox(height: 10),
+            const Trends(),
+            const SizedBox(height: 15),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: books.map((book) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                            title: book['title'] ?? 'Unknown Title',
+                            author: book['author'] ?? 'Unknown Author',
+                            description: book['description'] ?? 'No description available.',
+                            bookUrl: book['pdf_url'], 
+                            isBookmarked: book['bookmarked'] ?? false,
+                            
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: ItemCards(
-                    imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                    text1: book['title'] ?? 'Unknown Title',
-                    text2: book['author'] ?? 'Unknown Author',
-                  ),
-                );
-              }).toList(),
+                      );
+                    },
+                    child: ItemCards(
+                      imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                      text1: book['title'] ?? 'Unknown Title',
+                      text2: book['author'] ?? 'Unknown Author',
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-        ],
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
-    ),
-  );
+    );
   }
 }
