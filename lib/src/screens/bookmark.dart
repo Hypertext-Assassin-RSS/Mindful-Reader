@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Bookmark extends StatelessWidget {
-  const Bookmark({super.key, Text? title});
+class Library extends StatelessWidget {
+  const Library({super.key, Text? title});
   
     @override
   Widget build(BuildContext context) {
@@ -9,7 +9,7 @@ class Bookmark extends StatelessWidget {
     // the major Material Components.
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bookmarks'),
+        title: const Text('Library'),
         actions: const [
           IconButton(
             icon: Icon(Icons.search),

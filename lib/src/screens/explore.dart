@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'category.dart';
+import '../widgets/category.dart';
 import 'itemcards.dart';
 import 'trends.dart';
-import 'details.dart';
+import '../widgets/details.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});

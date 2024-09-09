@@ -17,8 +17,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLogin = true;
-  bool _passwordVisible = false; // Toggle password visibility
-  bool _confirmPasswordVisible = false; // For confirm password
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false; 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  // Input validation: Check if any field is empty
+
   bool _validateInputs() {
     if (isLogin) {
       if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
@@ -60,9 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return true;
   }
 
-  // Perform Login
+
   Future<void> _login() async {
-    if (!_validateInputs()) return; // Validate inputs first
+    if (!_validateInputs()) return;
 
     final username = _usernameController.text;
     final password = _passwordController.text;
@@ -106,14 +106,14 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
       } else {
-        // Handle errors
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
     } catch (error) {
       debugPrint('error: $error');
-      // Handle server errors
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error connecting to the server')),
       );
@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Perform Signup
   Future<void> _signup() async {
-    if (!_validateInputs()) return; // Validate inputs first
+    if (!_validateInputs()) return;
 
     final username = _usernameController.text;
     final email = _emailController.text;
