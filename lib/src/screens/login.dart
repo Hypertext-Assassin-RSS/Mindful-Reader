@@ -69,12 +69,15 @@ class _LoginScreenState extends State<LoginScreen> {
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
-      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/login',
+      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/auth/login',
         data: {
-          'username': username,
+          'email': username,
           'password': password,
         },
       );
+
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.data.toString());
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -133,10 +136,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('${dotenv.env['API_BASE_URL']}/signup'),
+        Uri.parse('${dotenv.env['API_BASE_URL']}/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': username,
+          'role':'reader',
           'email': email,
           'password': password,
         }),

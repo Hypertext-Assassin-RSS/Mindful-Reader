@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     debugPrint('Getting Books');
     await dotenv.load(fileName: "assets/config/.env");
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books/all');
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchBookmarks(data) async {
     
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks',
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks ',
       data: {
         "username":username
       }
