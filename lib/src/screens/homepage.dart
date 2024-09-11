@@ -100,6 +100,11 @@ class _HomePageState extends State<HomePage> {
                             bookUrl: book['pdf_url'],
                             isBookmarked: book['bookmarked'] ?? false,
                             id: book['_id'],
+                            size: book['size'],
+                            pages: book['pages'], 
+                            price: book['price'], 
+                            rating: book['rating'],
+
                           ),
                         ),
                       );
@@ -133,7 +138,10 @@ class _HomePageState extends State<HomePage> {
                             bookUrl: book['pdf_url'], 
                             isBookmarked: book['bookmarked'] ?? false, 
                             id: book['_id'],
-                            
+                            size: book['size'],
+                            pages: book['pages'],
+                            price: book['price'], 
+                            rating: book['rating'],
                           ),
                         ),
                       );
