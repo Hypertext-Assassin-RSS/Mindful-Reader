@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../colors/color.dart';
@@ -12,9 +13,12 @@ class DetailsScreen extends StatefulWidget {
   final String description;
   final String bookUrl;
   final bool isBookmarked;
+  final String id;
+  
 
   const DetailsScreen({
     super.key,
+    required this.id,
     required this.imageUrl,
     required this.title,
     required this.author,
@@ -23,19 +27,48 @@ class DetailsScreen extends StatefulWidget {
     required this.isBookmarked,
   });
 
+  
+
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
   late bool isBookmarked;
+  String username = '';
 
   @override
   void initState() {
+    fetchBookmarks();
     super.initState();
     isBookmarked = widget.isBookmarked;
-    debugPrint(widget.isBookmarked.toString());
+    debugPrint(widget.id.toString());
   }
+
+    Future<void> fetchBookmarks() async {
+      final prefs = await SharedPreferences.getInstance();
+      username = prefs.getString('username') ?? '';
+    try {
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks/title',
+      data: {
+        "username":username,
+        'title': widget.title,
+        }
+      );
+      if (response.statusCode == 200 && response.data.isNotEmpty) {
+        setState(() {
+          isBookmarked = true;
+        });
+      } else {
+        debugPrint('Failed to load bookmarks or Not Bookmark');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching bookmarks: $e');
+      }
+    }
+  }
+
 
   Future<void> _toggleBookmark() async {
     final prefs = await SharedPreferences.getInstance();

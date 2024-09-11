@@ -48,7 +48,6 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            fetchBookmarks(response.data);
             books = response.data;
             isLoading = false;
           });
@@ -64,37 +63,6 @@ class _HomePageState extends State<HomePage> {
       }
       if (kDebugMode) {
         print('Error fetching books: $e');
-      }
-    }
-  }
-
-  Future<void> fetchBookmarks(data) async {
-    
-    try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks ',
-      data: {
-        "username":username
-      }
-      );
-      if (response.statusCode == 200) {
-        debugPrint(response.data.toString());
-        final bookmarks = response.data;
-        setState(() {
-          data.forEach((book) {
-            bookmarks.forEach((bookmark) {
-              if(book['title'] == bookmark['title'] ){
-                book['bookmarked'] = true;
-              };
-            });
-          });
-          return data;
-        });
-      } else {
-        debugPrint('Failed to load bookmarks');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching bookmarks: $e');
       }
     }
   }
@@ -131,6 +99,7 @@ class _HomePageState extends State<HomePage> {
                             description: book['description'] ?? 'No description available.',
                             bookUrl: book['pdf_url'],
                             isBookmarked: book['bookmarked'] ?? false,
+                            id: book['_id'],
                           ),
                         ),
                       );
@@ -162,7 +131,8 @@ class _HomePageState extends State<HomePage> {
                             author: book['author'] ?? 'Unknown Author',
                             description: book['description'] ?? 'No description available.',
                             bookUrl: book['pdf_url'], 
-                            isBookmarked: book['bookmarked'] ?? false,
+                            isBookmarked: book['bookmarked'] ?? false, 
+                            id: book['_id'],
                             
                           ),
                         ),
