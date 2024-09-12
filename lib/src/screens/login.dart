@@ -131,7 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final username = _usernameController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
-    final confirmPassword = _confirmPasswordController.text;
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
