@@ -17,7 +17,7 @@ class ReadBookScreen extends StatefulWidget {
 
 class _ReadBookScreenState extends State<ReadBookScreen> {
   final noScreenshot = NoScreenshot.instance;
-  
+
   String? localPath;
   bool isLoading = true;
   int totalPages = 0;
@@ -34,25 +34,24 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   }
 
   Future<void> _downloadAndSaveBook() async {
-  try {
-    final response = await http.get(Uri.parse(widget.bookUrl));
-    if (response.statusCode == 200) {
-      final dir = await getApplicationDocumentsDirectory();
-      
+    try {
+      final response = await http.get(Uri.parse(widget.bookUrl));
+      if (response.statusCode == 200) {
+        final dir = await getApplicationDocumentsDirectory();
 
-      final cleanUrl = widget.bookUrl.split('?').first;
-      final fileName = cleanUrl.split('/').last;
-      final file = File('${dir.path}/$fileName');
-      
-      await file.writeAsBytes(response.bodyBytes);
-      setState(() {
-        localPath = file.path;
-        isLoading = false;
-        isEpub = fileName.endsWith('.epub');
-        if (isEpub) {
-          epubController = EpubController(document: EpubDocument.openFile(File(localPath!)));
-        }
-      });
+        final cleanUrl = widget.bookUrl.split('?').first;
+        final fileName = cleanUrl.split('/').last;
+        final file = File('${dir.path}/$fileName');
+
+        await file.writeAsBytes(response.bodyBytes);
+        setState(() {
+          localPath = file.path;
+          isLoading = false;
+          isEpub = fileName.endsWith('.epub');
+          if (isEpub) {
+            epubController = EpubController(document: EpubDocument.openFile(File(localPath!)));
+          }
+        });
       } else {
         throw Exception('Failed to load book');
       }
@@ -63,7 +62,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
       print('Error downloading book: $e');
     }
   }
-
 
   void _jumpToPage(int pageNumber) {
     if (pdfViewController != null && pageNumber >= 0 && pageNumber < totalPages) {
