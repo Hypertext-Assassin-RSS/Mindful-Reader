@@ -33,6 +33,7 @@ dependencies:
   alh_pdf_view: ^2.0.1
   carousel_slider: ^5.0.0
   shared_preferences: ^2.3.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

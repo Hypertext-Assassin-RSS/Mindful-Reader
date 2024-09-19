@@ -2,9 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../colors/color.dart';
 import '../screens/read.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String id;
@@ -40,14 +41,15 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   late bool isBookmarked;
+  late bool isPurchased = false; // Initialize the isPurchased flag
   String username = '';
 
   @override
   void initState() {
     fetchBookmarks();
+    checkLibrary();
     super.initState();
     isBookmarked = widget.isBookmarked;
-    debugPrint(widget.pages.toString());
   }
 
   Future<void> fetchBookmarks() async {
@@ -55,17 +57,40 @@ class _DetailsScreenState extends State<DetailsScreen> {
     username = prefs.getString('username') ?? '';
     try {
       final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks/title',
-        data: {
-          "username": username,
-          'title': widget.title,
-        }
-      );
+          data: {
+            "username": username,
+            'title': widget.title,
+          });
       if (response.statusCode == 200 && response.data.isNotEmpty) {
         setState(() {
           isBookmarked = true;
         });
       } else {
         debugPrint('Failed to load bookmarks or Not Bookmark');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching bookmarks: $e');
+      }
+    }
+  }
+
+  Future<void> checkLibrary() async {
+    final prefs = await SharedPreferences.getInstance();
+    username = prefs.getString('username') ?? '';
+    try {
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library/library-book',
+          data: {
+            "username": username,
+            'title': widget.title,
+          });
+      if (response.statusCode == 200 && response.data.isNotEmpty) {
+        setState(() {
+          isPurchased = true;
+          debugPrint('Book Purchased');
+        });
+      } else {
+        debugPrint('Book is Not Purchased');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -119,6 +144,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
+  // Function to open the URL in the browser
+  Future<void> _openUrlInBrowser() async {
+    final url = widget.bookUrl;
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,14 +194,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // If purchased, allow reading, else open URL in browser
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl),
-                          ),
-                        );
+                        if (isPurchased) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl),
+                            ),
+                          );
+                        } else {
+                          _openUrlInBrowser();
+                        }
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -176,9 +216,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           color: KFourthColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Text(
-                          'Read',
-                          style: TextStyle(
+                        child: Text(
+                          isPurchased ? 'Read' : 'Get Book',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: KPrimaryColor,
@@ -210,61 +250,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ],
                 ),
               ),
-              // const SizedBox(height: 20),
-              // Text(
-              //   widget.title,
-              //   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              // ),
-              const SizedBox(height: 10),
-              Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: KFourthColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              widget.author,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w700,
-                                color: KPrimaryColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-
               const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: Text(
-                            'Pages: ${widget.pages}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center, 
-                          ),
-
+                      'Pages: ${widget.pages}',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   Expanded(
                     child: Text(
                       'Size: ${widget.size} MB',
-                      textAlign: TextAlign.center, 
+                      textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
@@ -295,7 +295,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
               Text(
                 widget.description,
