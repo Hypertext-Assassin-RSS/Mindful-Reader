@@ -24,6 +24,7 @@ class _ProfileState extends State<Profile> {
     
   }
 
+
 Future<void> _getUserData() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   setState(() {
