@@ -16,6 +16,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+    @override
+  void initState() {
+    super.initState();
+
+  }
+
+  
   bool isLogin = true;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false; 
@@ -71,22 +79,23 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final response = await Dio().post('${dotenv.env['API_BASE_URL']}/auth/login',
         data: {
-          'email': username,
+          'username': username,
           'password': password,
         },
       );
 
-      debugPrint(response.statusCode.toString());
       debugPrint(response.data.toString());
 
       if (response.statusCode == 200) {
         final data = response.data;
         final token = data['token'];
+        final email = data['email'];
 
         // Save the JWT token in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('username', username);
+        await prefs.setString('email', email);
 
         ScaffoldMessenger.of(context).showMaterialBanner(
           MaterialBanner(
