@@ -145,14 +145,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   // Function to open the URL in the browser
-  Future<void> _openUrlInBrowser() async {
-    final url = widget.bookUrl;
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+Future<void> _openUrlInBrowser() async {
+ final Uri url = Uri.parse('https://frontend-cyan-eta.vercel.app/books/details/'+ widget.id);
+ if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+ }
+}
+
 
   @override
   Widget build(BuildContext context) {
