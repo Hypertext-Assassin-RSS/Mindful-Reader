@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mindful_reader/src/widgets/details.dart';
+import 'package:mindful_reader/src/widgets/splashScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Library extends StatefulWidget {
@@ -100,26 +101,29 @@ class _LibraryState extends State<Library> {
                     itemBuilder: (context, index) {
                       final book = books[index];
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
-                                title: book['title'] ?? 'Unknown Title',
-                                author: book['author'] ?? 'Unknown Author',
-                                description: book['description'] ?? 'No description available.',
-                                bookUrl: book['pdf_url'],
-                                isBookmarked: book['bookmarked'] ?? false,
-                                id: book['_id'],
-                                size: book['size'],
-                                pages: book['pages'],
-                                price: book['price'],
-                                rating: book['rating'],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SplashScreen(
+                                  imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                  nextScreen: DetailsScreen(
+                                    imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                    title: book['title'] ?? 'Unknown Title',
+                                    author: book['author'] ?? 'Unknown Author',
+                                    description: book['description'] ?? 'No description available.',
+                                    bookUrl: book['pdf_url'],
+                                    isBookmarked: book['bookmarked'] ?? false,
+                                    id: book['_id'],
+                                    size: book['size'],
+                                    pages: book['pages'],
+                                    price: book['price'],
+                                    rating: book['rating'],
+                                  ),
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
