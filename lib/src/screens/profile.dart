@@ -24,11 +24,14 @@ class _ProfileState extends State<Profile> {
     
   }
 
-  Future<void> _getUserData() async {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        this.username = (await prefs.getString('username'))!;
-        this.email =  (await prefs.getString('email'))!;
-  }
+Future<void> _getUserData() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  setState(() {
+    username = prefs.getString('username') ?? 'Username';
+    email = prefs.getString('email') ?? 'Email';
+  });
+}
+
 
 
   @override
