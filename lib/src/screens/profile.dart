@@ -26,8 +26,8 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _getUserData() async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        this.username = (await prefs.getString('username'))!;
-        this.email =  (await prefs.getString('email'))!;
+        username = (await prefs.getString('username'))!;
+        email =  (await prefs.getString('email'))!;
   }
 
 
