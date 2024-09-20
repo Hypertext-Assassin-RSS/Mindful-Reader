@@ -19,26 +19,18 @@ class ItemCards extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 200,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: NetworkImage(imagepic),
-                fit: BoxFit.cover,
-                onError: (Object error, StackTrace? stackTrace) {
-                  // Error
-                },
-              ),
-            ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
             child: Image.network(
               imagepic,
-              fit: BoxFit.cover,
+              height: 200,
+              width: 150,
+              fit: BoxFit.fill,
               errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/images/image_not.jpg',
+                  height: 200,
+                  width: 150,
                   fit: BoxFit.cover,
                 );
               },
@@ -47,7 +39,7 @@ class ItemCards extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: SizedBox(
-              width: 150,  // Fixed width for the text
+              width: 150,
               child: Text(
                 text1,
                 maxLines: 1,
@@ -61,7 +53,7 @@ class ItemCards extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 150,  // Fixed width for the text
+            width: 150,
             child: Text(
               text2,
               maxLines: 1,

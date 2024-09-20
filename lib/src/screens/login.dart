@@ -16,7 +16,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+    @override
+  void initState() {
+    super.initState();
+
+  }
+
+  
   bool isLogin = true;
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false; 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -28,27 +38,64 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  // Perform Login
+
+  bool _validateInputs() {
+    if (isLogin) {
+      if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')),
+        );
+        return false;
+      }
+    } else {
+      if (_usernameController.text.isEmpty ||
+          _emailController.text.isEmpty ||
+          _passwordController.text.isEmpty ||
+          _confirmPasswordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')),
+        );
+        return false;
+      }
+
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   Future<void> _login() async {
+    if (!_validateInputs()) return;
+
     final username = _usernameController.text;
     final password = _passwordController.text;
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
-      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/login',
+      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/auth/login',
         data: {
           'username': username,
           'password': password,
         },
       );
 
+      debugPrint(response.data.toString());
+
       if (response.statusCode == 200) {
         final data = response.data;
         final token = data['token'];
+        final email = data['email'];
 
         // Save the JWT token in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
+        await prefs.setString('username', username);
+        await prefs.setString('email', email);
 
         ScaffoldMessenger.of(context).showMaterialBanner(
           MaterialBanner(
@@ -72,14 +119,14 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
       } else {
-        // Handle errors
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
     } catch (error) {
       debugPrint('error: $error');
-      // Handle server errors
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error connecting to the server')),
       );
@@ -88,25 +135,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Perform Signup
   Future<void> _signup() async {
+    if (!_validateInputs()) return;
+
     final username = _usernameController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
-    final confirmPassword = _confirmPasswordController.text;
     await dotenv.load(fileName: "assets/config/.env");
-
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
 
     try {
       final response = await http.post(
-        Uri.parse('${dotenv.env['API_BASE_URL']}/signup'),
+        Uri.parse('${dotenv.env['API_BASE_URL']}/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': username,
+          'role':'reader',
           'email': email,
           'password': password,
         }),
@@ -202,18 +244,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: _buildTextField('Password', true, _passwordController)
-                    .animate()
-                    .fadeIn(duration: 900.ms),
+                child: _buildPasswordTextField(
+                  'Password', 
+                  _passwordController, 
+                  _passwordVisible,
+                  () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  }
+                ).animate().fadeIn(duration: 900.ms),
               ),
 
               if (!isLogin) ...[
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: _buildTextField('Confirm Password', true, _confirmPasswordController)
-                      .animate()
-                      .fadeIn(duration: 1000.ms),
+                  child: _buildPasswordTextField(
+                    'Confirm Password', 
+                    _confirmPasswordController, 
+                    _confirmPasswordVisible, 
+                    () {
+                      setState(() {
+                        _confirmPasswordVisible = !_confirmPasswordVisible;
+                      });
+                    }
+                  ).animate().fadeIn(duration: 1000.ms),
                 ),
               ],
 
@@ -281,6 +337,33 @@ class _LoginScreenState extends State<LoginScreen> {
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+      ),
+    );
+  }
+
+  // Build a text field with password visibility toggle
+  Widget _buildPasswordTextField(String hint, TextEditingController controller, bool isVisible, VoidCallback toggleVisibility) {
+    return TextField(
+      controller: controller,
+      obscureText: !isVisible,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white54),
+        filled: true,
+        fillColor: Colors.grey[800],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        suffixIcon: IconButton(
+          icon: Icon(
+            isVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.white54,
+          ),
+          onPressed: toggleVisibility,
+        ),
       ),
     );
   }

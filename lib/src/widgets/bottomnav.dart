@@ -4,7 +4,7 @@ import '../colors/color.dart';
 import '../screens/homepage.dart';
 import '../screens/profile.dart';
 import '../screens/explore.dart';
-import '../screens/bookmark.dart';
+import '../screens/library.dart';
 
 
 class BottomNavBar extends StatefulWidget {
@@ -19,7 +19,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final screens = [
     const HomePage(),
     const ExploreScreen(),
-    const Bookmark(),
+    const Library(),
     const Profile(),
   ];
 
@@ -50,12 +50,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                'assets/icons/bookmark.svg',
+                'assets/icons/book-bookmark.svg',
                 color: KFourthColor,
                 width: 16,
                 height: 19,
               ),
-              label: 'Bookmarks',
+              label: 'Library',
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(

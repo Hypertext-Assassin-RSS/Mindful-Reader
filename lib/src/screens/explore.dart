@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mindful_reader/src/widgets/splashScreen.dart';
 
-import 'category.dart';
+import '../widgets/category.dart';
 import 'itemcards.dart';
 import 'trends.dart';
-import 'details.dart';
+import '../widgets/details.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -36,7 +38,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     debugPrint('Getting Books');
     await dotenv.load(fileName: "assets/config/.env");
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books/all');
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
@@ -100,19 +102,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _isSearchVisible
-            ? TextField(
+            ? CupertinoSearchTextField(
                 controller: _searchController,
                 focusNode: _searchFocusNode,
-                decoration: const InputDecoration(
-                  hintText: 'Search...',
-                  border: InputBorder.none,
-                ),
+                placeholder: 'Search',
                 style: const TextStyle(color: Colors.black),
               )
             : const Text('Search',
             style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.normal,
                   color: Colors.black,
                 ),
             ),
@@ -138,20 +137,29 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     child: Row(
                       children: filteredBooks.map((book) {
                         return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailsScreen(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                            MaterialPageRoute(
+                              builder: (context) => SplashScreen(
+                                imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                nextScreen: DetailsScreen(
                                   imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
                                   title: book['title'] ?? 'Unknown Title',
                                   author: book['author'] ?? 'Unknown Author',
                                   description: book['description'] ?? 'No description available.',
                                   bookUrl: book['pdf_url'],
+                                  isBookmarked: book['bookmarked'] ?? false,
+                                  id: book['_id'],
+                                  size: book['size'],
+                                  pages: book['pages'],
+                                  price: book['price'],
+                                  rating: book['rating'],
                                 ),
                               ),
-                            );
-                          },
+                            ),
+                          );
+                        },
                           child: ItemCards(
                             imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
                             text1: book['title'] ?? 'Unknown Title',
@@ -173,12 +181,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailsScreen(
+                                builder: (context) => SplashScreen(
                                   imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                                  title: book['title'] ?? 'Unknown Title',
-                                  author: book['author'] ?? 'Unknown Author',
-                                  description: book['description'] ?? 'No description available.',
-                                  bookUrl: book['pdf_url'],
+                                  nextScreen: DetailsScreen(
+                                    imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                    title: book['title'] ?? 'Unknown Title',
+                                    author: book['author'] ?? 'Unknown Author',
+                                    description: book['description'] ?? 'No description available.',
+                                    bookUrl: book['pdf_url'],
+                                    isBookmarked: book['bookmarked'] ?? false,
+                                    id: book['_id'],
+                                    size: book['size'],
+                                    pages: book['pages'],
+                                    price: book['price'],
+                                    rating: book['rating'],
+                                  ),
                                 ),
                               ),
                             );

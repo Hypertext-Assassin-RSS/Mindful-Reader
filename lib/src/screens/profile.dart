@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/color.dart';
 import '../screens/login.dart';
 
@@ -11,6 +12,25 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String username = 'Username';
+  String email = 'Email';
+
+
+  @override
+  void initState() {
+    _getUserData();
+    super.initState();
+
+    
+  }
+
+  Future<void> _getUserData() async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        this.username = (await prefs.getString('username'))!;
+        this.email =  (await prefs.getString('email'))!;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,29 +60,22 @@ class _ProfileState extends State<Profile> {
                     ),
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/images/profile.png'), // Replace with your profile picture
+                      backgroundImage: AssetImage('assets/images/user.png'), // Replace with your profile picture
                     ),
                   ),
                   const SizedBox(height: 15),
-                  const Text(
-                    'Rajith Sanjaya',
-                    style: TextStyle(
+                  Text(
+                    this.username,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: KFourthColor,
                     ),
                   ),
                   const SizedBox(height: 5),
-                  const Text(
-                    '0767898789',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: KFourthColor,
-                    ),
-                  ),
-                  const Text(
-                    'RajithSanjaya@gmail.com',
-                    style: TextStyle(
+                  Text(
+                    this.email,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: KFourthColor,
                     ),
@@ -76,21 +89,13 @@ class _ProfileState extends State<Profile> {
               child: ListView(
                 children: [
                   ProfileMenu(
-                    svg: 'assets/icons/history.svg',
-                    text1: 'Order History',
-                  ),
-                  ProfileMenu(
-                    svg: 'assets/icons/address.svg',
-                    text1: 'Shipping Address',
-                  ),
-                  ProfileMenu(
                     svg: 'assets/icons/privacy.svg',
                     text1: 'Privacy Policy',
                   ),
-                  ProfileMenu(
-                    svg: 'assets/icons/settings.svg',
-                    text1: 'Settings',
-                  ),
+                  // ProfileMenu(
+                  //   svg: 'assets/icons/settings.svg',
+                  //   text1: 'Settings',
+                  // ),
                   ProfileMenu(
                     svg: 'assets/icons/contact.svg',
                     text1: 'Contact Us',
