@@ -4,7 +4,7 @@ import '../colors/color.dart';
 import '../screens/homepage.dart';
 import '../screens/profile.dart';
 import '../screens/explore.dart';
-import '../screens/bookmark.dart';
+import '../screens/library.dart';
 
 
 class BottomNavBar extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import 'package:mindful_reader/src/screens/bookmark.dart';
+import 'package:mindful_reader/src/screens/library.dart';
 import 'package:mindful_reader/src/screens/home.dart';
 import 'package:mindful_reader/src/screens/profile.dart';
 import 'package:mindful_reader/src/screens/search.dart';

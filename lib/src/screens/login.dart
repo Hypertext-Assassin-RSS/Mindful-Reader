@@ -16,6 +16,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+    @override
+  void initState() {
+    super.initState();
+
+  }
+
+  
   bool isLogin = true;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false; 
@@ -69,21 +77,25 @@ class _LoginScreenState extends State<LoginScreen> {
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
-      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/login',
+      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/auth/login',
         data: {
           'username': username,
           'password': password,
         },
       );
 
+      debugPrint(response.data.toString());
+
       if (response.statusCode == 200) {
         final data = response.data;
         final token = data['token'];
+        final email = data['email'];
 
         // Save the JWT token in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('username', username);
+        await prefs.setString('email', email);
 
         ScaffoldMessenger.of(context).showMaterialBanner(
           MaterialBanner(
@@ -128,15 +140,15 @@ class _LoginScreenState extends State<LoginScreen> {
     final username = _usernameController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
-    final confirmPassword = _confirmPasswordController.text;
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
       final response = await http.post(
-        Uri.parse('${dotenv.env['API_BASE_URL']}/signup'),
+        Uri.parse('${dotenv.env['API_BASE_URL']}/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': username,
+          'role':'reader',
           'email': email,
           'password': password,
         }),

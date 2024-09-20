@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mindful_reader/src/widgets/splashScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'banner.dart';
@@ -44,11 +45,10 @@ class _HomePageState extends State<HomePage> {
     debugPrint('Getting Books');
     await dotenv.load(fileName: "assets/config/.env");
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books');
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books/all');
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            fetchBookmarks(response.data);
             books = response.data;
             isLoading = false;
           });
@@ -64,37 +64,6 @@ class _HomePageState extends State<HomePage> {
       }
       if (kDebugMode) {
         print('Error fetching books: $e');
-      }
-    }
-  }
-
-  Future<void> fetchBookmarks(data) async {
-    
-    try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks',
-      data: {
-        "username":username
-      }
-      );
-      if (response.statusCode == 200) {
-        debugPrint(response.data.toString());
-        final bookmarks = response.data;
-        setState(() {
-          data.forEach((book) {
-            bookmarks.forEach((bookmark) {
-              if(book['title'] == bookmark['title'] ){
-                book['bookmarked'] = true;
-              };
-            });
-          });
-          return data;
-        });
-      } else {
-        debugPrint('Failed to load bookmarks');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching bookmarks: $e');
       }
     }
   }
@@ -124,17 +93,26 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailsScreen(
+                          builder: (context) => SplashScreen(
                             imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                            title: book['title'] ?? 'Unknown Title',
-                            author: book['author'] ?? 'Unknown Author',
-                            description: book['description'] ?? 'No description available.',
-                            bookUrl: book['pdf_url'],
-                            isBookmarked: book['bookmarked'] ?? false,
+                            nextScreen: DetailsScreen(
+                              imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                              title: book['title'] ?? 'Unknown Title',
+                              author: book['author'] ?? 'Unknown Author',
+                              description: book['description'] ?? 'No description available.',
+                              bookUrl: book['pdf_url'],
+                              isBookmarked: book['bookmarked'] ?? false,
+                              id: book['_id'],
+                              size: book['size'],
+                              pages: book['pages'],
+                              price: book['price'],
+                              rating: book['rating'],
+                            ),
                           ),
                         ),
                       );
                     },
+
                     child: ItemCards(
                       imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
                       text1: book['title'] ?? 'Unknown Title',
@@ -156,14 +134,21 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailsScreen(
+                          builder: (context) => SplashScreen(
                             imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                            title: book['title'] ?? 'Unknown Title',
-                            author: book['author'] ?? 'Unknown Author',
-                            description: book['description'] ?? 'No description available.',
-                            bookUrl: book['pdf_url'], 
-                            isBookmarked: book['bookmarked'] ?? false,
-                            
+                            nextScreen: DetailsScreen(
+                              imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                              title: book['title'] ?? 'Unknown Title',
+                              author: book['author'] ?? 'Unknown Author',
+                              description: book['description'] ?? 'No description available.',
+                              bookUrl: book['pdf_url'],
+                              isBookmarked: book['bookmarked'] ?? false,
+                              id: book['_id'],
+                              size: book['size'],
+                              pages: book['pages'],
+                              price: book['price'],
+                              rating: book['rating'],
+                            ),
                           ),
                         ),
                       );

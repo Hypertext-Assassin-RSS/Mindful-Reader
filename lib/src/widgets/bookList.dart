@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:mindful_reader/src/widgets/detailsPopup.dart';
 
 class BookListWidget extends StatelessWidget {
