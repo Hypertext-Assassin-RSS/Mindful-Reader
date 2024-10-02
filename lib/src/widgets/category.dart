@@ -24,7 +24,7 @@ class _CategoryCardState extends State<CategoryCard> {
   Future<void> _fetchCategories() async {
     await dotenv.load(fileName: "assets/config/.env");
     try {
-      var response = await Dio().get('${dotenv.env['API_BASE_URL']}/categorie/categories');  // Update this URL with your actual backend API
+      var response = await Dio().get('${dotenv.env['API_BASE_URL']}/categorie/categories');
       setState(() {
         categories = List<String>.from(response.data.map((item) => item['name']));
         isLoading = false;
