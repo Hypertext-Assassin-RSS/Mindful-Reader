@@ -79,8 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final response = await Dio().post('${dotenv.env['API_BASE_URL']}/auth/login',
         data: {
-          'username': username,
-          'password': password,
+          'user_login': username,
+          'user_pass': password,
         },
       );
 
@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         final data = response.data;
         final token = data['token'];
-        final email = data['email'];
+        final email = data['user_email'];
 
         // Save the JWT token in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
