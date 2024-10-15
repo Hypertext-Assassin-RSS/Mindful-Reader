@@ -39,7 +39,7 @@ class Trends extends StatelessWidget {
           padding: const EdgeInsets.only(top: 5, left: 200),
           child: CupertinoButton(
             onPressed: () {  }, 
-            child: const Text('See all',
+            child: const Text('All',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
