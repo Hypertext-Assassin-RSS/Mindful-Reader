@@ -9,8 +9,9 @@ import 'package:no_screenshot/no_screenshot.dart';
 
 class ReadBookScreen extends StatefulWidget {
   final String bookUrl;
+  final String title;
 
-  const ReadBookScreen({super.key, required this.bookUrl});
+  const ReadBookScreen({super.key, required this.bookUrl, required this.title});
 
   @override
   _ReadBookScreenState createState() => _ReadBookScreenState();
@@ -84,7 +85,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Read Book'),
+        title: Text(widget.title),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
