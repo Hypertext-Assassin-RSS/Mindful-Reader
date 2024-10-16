@@ -206,9 +206,13 @@ class ProfileMenu extends StatelessWidget {
     );
   }
 
-  void _logout(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
-  }
+  void _logout(BuildContext context) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
+
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => const LoginScreen()),
+  );
+}
+
 }
