@@ -15,8 +15,8 @@ class DetailsScreen extends StatefulWidget {
   final String author;
   final String description;
   final String bookUrl;
-  final int size;
-  final int pages;
+  final String size;
+  final String pages;
   final String price;
   final double rating;
   final bool isBookmarked;
@@ -264,7 +264,7 @@ Future<void> _openUrlInBrowser() async {
                   ),
                   Expanded(
                     child: Text(
-                      'Size: ${widget.size} MB',
+                      'Size: ${widget.size}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16),
                     ),
