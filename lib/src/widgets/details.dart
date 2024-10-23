@@ -1,3 +1,4 @@
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   late bool isBookmarked;
   late bool isPurchased = false;
   String username = '';
+  String userId = '';
 
   @override
   void initState() {
@@ -79,13 +81,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<void> checkLibrary() async {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getString('username') ?? '';
+    userId = prefs.getString('userId') ?? '';
     try {
       final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library',
           data: {
-            'id':'1',
+            'id':userId,
             'title': widget.title,
           });
-      if (response.statusCode == 200 && response.data.isNotEmpty) {
+
+      if (response.data['exists']) {
         setState(() {
           isPurchased = true;
           debugPrint('Book Purchased');

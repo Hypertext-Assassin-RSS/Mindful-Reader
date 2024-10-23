@@ -14,6 +14,8 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> {
   late String username;
+  late String userId;
+
   List<dynamic> books = [];
   bool isLoading = true;
 
@@ -27,12 +29,16 @@ class _LibraryState extends State<Library> {
     try {
       final prefs = await SharedPreferences.getInstance();
       username = prefs.getString('username') ?? '';
+      userId = prefs.getString('userId') ?? '';
+
+      debugPrint(userId);
+
       await dotenv.load(fileName: "assets/config/.env");
 
       if (username.isNotEmpty) {
         var dio = Dio();
         final response = await dio.get(
-          '${dotenv.env['API_BASE_URL']}/library/1',
+          '${dotenv.env['API_BASE_URL']}/library/' + userId,
         );
 
         debugPrint(response.data.toString());

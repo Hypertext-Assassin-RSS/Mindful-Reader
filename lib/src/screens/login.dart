@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -77,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
-      final response = await Dio().post('${dotenv.env['API_BASE_URL']}/auth/login',
+      final response = await Dio().post('https://samanaladanuma.lk/wp-json/jwt-auth/v1/token',
         data: {
           'username': username,
           'password': password,
@@ -89,13 +90,17 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         final data = response.data;
         final token = data['token'];
-        final email = data['email'];
+        final email = data['user_email'];
 
-        // Save the JWT token in shared preferences
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+
+        String userId = decodedToken['data']['user']['id'];
+
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('username', username);
         await prefs.setString('email', email);
+        await prefs.setString('userId', userId);
 
         ScaffoldMessenger.of(context).showMaterialBanner(
           MaterialBanner(
