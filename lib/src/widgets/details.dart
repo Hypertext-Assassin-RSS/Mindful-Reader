@@ -42,7 +42,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   late bool isBookmarked;
-  late bool isPurchased = false; // Initialize the isPurchased flag
+  late bool isPurchased = false;
   String username = '';
 
   @override
@@ -80,9 +80,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getString('username') ?? '';
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library/library-book',
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library',
           data: {
-            "username": username,
+            'id':'1',
             'title': widget.title,
           });
       if (response.statusCode == 200 && response.data.isNotEmpty) {
@@ -95,7 +95,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error fetching bookmarks: $e');
+        print('Error fetching library: $e');
       }
     }
   }
