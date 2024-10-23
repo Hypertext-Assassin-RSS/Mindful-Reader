@@ -6,9 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../colors/color.dart';
 import '../screens/read.dart';
+import 'package:html/parser.dart' as htmlParser;
 
 class DetailsScreen extends StatefulWidget {
-  final String id;
+  final int id;
   final String imageUrl;
   final String title;
   final String author;
@@ -16,7 +17,7 @@ class DetailsScreen extends StatefulWidget {
   final String bookUrl;
   final int size;
   final int pages;
-  final int price;
+  final String price;
   final double rating;
   final bool isBookmarked;
 
@@ -146,7 +147,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   // Function to open the URL in the browser
 Future<void> _openUrlInBrowser() async {
- final Uri url = Uri.parse('https://frontend-cyan-eta.vercel.app/books/details/'+ widget.id);
+  String title = widget.title.replaceAll(' ', '-');
+ final Uri url = Uri.parse('https://samanaladanuma.lk/product/'+ title);
  if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
  }
@@ -274,7 +276,7 @@ Future<void> _openUrlInBrowser() async {
                 children: [
                   Expanded(
                     child: Text(
-                      'Rs: ${widget.price.toStringAsFixed(2)}',
+                      'Rs: ${widget.price}' + '.00',
                       style: const TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
@@ -295,8 +297,7 @@ Future<void> _openUrlInBrowser() async {
                 ],
               ),
               const SizedBox(height: 20),
-              Text(
-                widget.description,
+              Text(convertHtmlToString(widget.description),
                 style: const TextStyle(fontSize: 16),
               ),
             ],
@@ -304,5 +305,12 @@ Future<void> _openUrlInBrowser() async {
         ),
       ),
     );
+  }
+  
+  String convertHtmlToString(String description) {
+    var document = htmlParser.parse(description);
+  String parsedString = document.body?.text ?? '';
+
+  return parsedString;
   }
 }
