@@ -31,8 +31,6 @@ class _LibraryState extends State<Library> {
       username = prefs.getString('username') ?? '';
       userId = prefs.getString('userId') ?? '';
 
-      debugPrint(userId);
-
       await dotenv.load(fileName: "assets/config/.env");
 
       if (username.isNotEmpty) {
@@ -40,8 +38,6 @@ class _LibraryState extends State<Library> {
         final response = await dio.get(
           '${dotenv.env['API_BASE_URL']}/library/' + userId,
         );
-
-        debugPrint(response.data.toString());
 
         if (response.statusCode == 200) {
           setState(() {
