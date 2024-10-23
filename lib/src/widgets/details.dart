@@ -1,3 +1,4 @@
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,9 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   late bool isBookmarked;
-  late bool isPurchased = false; // Initialize the isPurchased flag
+  late bool isPurchased = false;
   String username = '';
+  String userId = '';
 
   @override
   void initState() {
@@ -79,13 +81,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<void> checkLibrary() async {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getString('username') ?? '';
+    userId = prefs.getString('userId') ?? '';
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library/library-book',
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library',
           data: {
-            "username": username,
+            'id':userId,
             'title': widget.title,
           });
-      if (response.statusCode == 200 && response.data.isNotEmpty) {
+
+      if (response.data['exists']) {
         setState(() {
           isPurchased = true;
           debugPrint('Book Purchased');
@@ -95,7 +99,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error fetching bookmarks: $e');
+        print('Error fetching library: $e');
       }
     }
   }
