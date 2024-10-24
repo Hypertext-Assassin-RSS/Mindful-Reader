@@ -49,6 +49,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   void initState() {
+    debugPrint(widget.rating);
     fetchBookmarks();
     checkLibrary();
     super.initState();
@@ -152,10 +153,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
   // Function to open the URL in the browser
 Future<void> _openUrlInBrowser() async {
   String title = widget.title.replaceAll(' ', '-');
- final Uri url = Uri.parse('https://samanaladanuma.lk/product/'+ title);
- if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
- }
+  final Uri url = Uri.parse('https://samanaladanuma.lk/product/'+ title);
+  if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+  }
 }
 
 
