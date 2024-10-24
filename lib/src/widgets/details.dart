@@ -19,7 +19,7 @@ class DetailsScreen extends StatefulWidget {
   final String size;
   final String pages;
   final String price;
-  final double rating;
+  final String rating;
   final bool isBookmarked;
 
   const DetailsScreen({
@@ -291,7 +291,7 @@ Future<void> _openUrlInBrowser() async {
                       children: List.generate(
                         5,
                         (index) => Icon(
-                          index < widget.rating ? Icons.star : Icons.star_border,
+                          index < double.parse(widget.rating) ? Icons.star : Icons.star_border,
                           color: Colors.black,
                           size: 24,
                         ),
