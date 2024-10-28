@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindful_reader/src/screens/bookmark.dart';
 import '../colors/color.dart';
 import '../screens/homepage.dart';
 import '../screens/profile.dart';
@@ -20,7 +21,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
     const HomePage(),
     const ExploreScreen(),
     const Library(),
+    const Bookmark(),
     const Profile(),
+    
   ];
 
   @override
@@ -59,13 +62,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
+                'assets/icons/bookmark-solid.svg',
+                color: KFourthColor,
+                width: 16,
+                height: 19,
+              ),
+              label: 'Bookmarks',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
                 'assets/icons/user-solid.svg',
                 color: KFourthColor,
                 width: 16,
                 height: 19,
               ),
               label: 'Profile',
-            ),  
+            )  
           ]),
     );
   }
