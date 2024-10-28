@@ -49,7 +49,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   void initState() {
-    debugPrint(widget.rating);
     fetchBookmarks();
     checkLibrary();
     super.initState();

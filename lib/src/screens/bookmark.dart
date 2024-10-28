@@ -1,36 +1,88 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mindful_reader/src/screens/itemcards.dart';
+import 'package:mindful_reader/src/widgets/category.dart';
 import 'package:mindful_reader/src/widgets/details.dart';
 import 'package:mindful_reader/src/widgets/splashScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Library extends StatefulWidget {
-  const Library({super.key});
+class Bookmark extends StatefulWidget {
+  const Bookmark({super.key});
 
   @override
-  _LibraryState createState() => _LibraryState();
+  State<Bookmark> createState() => _BookmarkState();
 }
 
-class _LibraryState extends State<Library> {
-  late String username;
-  late String userId;
-  bool _isSearchVisible = false; 
-  final TextEditingController _searchController = TextEditingController(); 
-  final FocusNode _searchFocusNode = FocusNode(); 
+class _BookmarkState extends State<Bookmark> {
+    List books = [];
+    List filteredBooks = [];
+    bool isLoading = true;
+    bool _isSearchVisible = false; 
+    final TextEditingController _searchController = TextEditingController(); 
+    final FocusNode _searchFocusNode = FocusNode(); 
 
-  List<dynamic> books = [];
-  bool isLoading = true;
-
-  @override
+      @override
   void initState() {
     super.initState();
-    fetchLibraryBooks();
+    if (books.isEmpty) {
+      fetchBooks();
+    }
+    _searchController.addListener(_filterBooks);
   }
 
-    void _toggleSearchBar() {
+
+    Future<void> fetchBooks() async {
+    debugPrint('Getting Bookmarks');
+    await dotenv.load(fileName: "assets/config/.env");
+      final prefs = await SharedPreferences.getInstance();
+      var username = prefs.getString('username') ?? '';
+    try {
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books/allbookmarks',
+      data: {
+          'username': username,
+        },
+      );
+
+
+      if (response.statusCode == 200) {
+        if (mounted) {
+          setState(() {
+            books = response.data;
+            filteredBooks = books;
+            isLoading = false;
+          });
+        }
+      } else {
+        throw Exception('Failed to load books');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      if (kDebugMode) {
+        print('Error fetching books: $e');
+      }
+    }
+  }
+
+  void _filterBooks() {
+    setState(() {
+      filteredBooks = books
+          .where((book) =>
+              book['title'].toLowerCase().contains(_searchController.text.toLowerCase()))
+          .toList();
+          if (kDebugMode) {
+            print('Filtered Books: ${filteredBooks.length}');
+          }
+    });
+  }
+
+  void _toggleSearchBar() {
     setState(() {
       _isSearchVisible = !_isSearchVisible;
       if (_isSearchVisible) {
@@ -38,55 +90,20 @@ class _LibraryState extends State<Library> {
       } else {
         _searchFocusNode.unfocus();
         _searchController.clear();
-        books = books;
+        filteredBooks = books;
       }
     });
   }
 
-  Future<void> fetchLibraryBooks() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      username = prefs.getString('username') ?? '';
-      userId = prefs.getString('userId') ?? '';
-
-      await dotenv.load(fileName: "assets/config/.env");
-
-      if (username.isNotEmpty) {
-        var dio = Dio();
-        final response = await dio.get(
-          '${dotenv.env['API_BASE_URL']}/library/' + userId,
-        );
-
-        if (response.statusCode == 200) {
-          setState(() {
-            books = response.data;
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to fetch library books')),
-          );
-        }
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Username not found in SharedPreferences')),
-        );
-      }
-    } catch (error) {
-      setState(() {
-        isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error occurred while fetching books')),
-      );
-    }
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterBooks);
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +136,7 @@ class _LibraryState extends State<Library> {
     : Column(
         children: [
           const SizedBox(height: 5),
+          const CategoryCard(),
           const SizedBox(height: 5),
           Expanded(
               child: GridView.builder(
@@ -128,9 +146,9 @@ class _LibraryState extends State<Library> {
                   mainAxisSpacing: 10.0,
                   childAspectRatio: 0.75,
                 ),
-                itemCount: books.length,
+                itemCount: filteredBooks.length,
                 itemBuilder: (context, index) {
-                  final book = books[index];
+                  final book = filteredBooks[index];
                   return Center(
                     child: InkWell(
                       onTap: () {
