@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -68,6 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return true;
   }
+
+
+  Future<void> _openUrlInBrowser() async {
+  final Uri url = Uri.parse('https://samanaladanuma.lk');
+  if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+  }
+}
 
 
   Future<void> _login() async {
@@ -305,7 +314,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
 
               GestureDetector(
-                onTap: toggleForm,
+                onTap: _openUrlInBrowser,
                 child: Text(
                   isLogin
                       ? "Don't have an account? Sign Up"

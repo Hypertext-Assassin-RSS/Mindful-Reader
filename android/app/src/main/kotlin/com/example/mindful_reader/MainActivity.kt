@@ -1,4 +1,4 @@
-package com.example.mindful_reader
+package com.samanala.iLeaf
 
 import io.flutter.embedding.android.FlutterActivity
 
