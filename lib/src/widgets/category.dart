@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mindful_reader/src/screens/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/color.dart';
 
 class CategoryCard extends StatefulWidget {
@@ -13,12 +15,29 @@ class CategoryCard extends StatefulWidget {
 class _CategoryCardState extends State<CategoryCard> {
   List<String> categories = [];
   bool isLoading = true;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
     _fetchCategories();
   }
+
+    Future<void> _checkLoginStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
+
+  if (token == null || token.isEmpty) {
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+    // );
+  }
+  else {
+    _isLoggedIn = true;
+  }
+}
 
   // Fetch categories from the API
   Future<void> _fetchCategories() async {
@@ -31,9 +50,11 @@ class _CategoryCardState extends State<CategoryCard> {
       });
     } catch (error) {
       print('Error fetching categories: $error');
-      setState(() {
-        isLoading = false;
-      });
+      if (_isLoggedIn) {
+          setState(() {
+            isLoading = false;
+        });
+      }
     }
   }
 

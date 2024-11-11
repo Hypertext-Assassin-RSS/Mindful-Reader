@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,16 +19,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-    @override
+  @override
   void initState() {
     super.initState();
-
   }
 
-  
   bool isLogin = true;
   bool _passwordVisible = false;
-  bool _confirmPasswordVisible = false; 
+  bool _confirmPasswordVisible = false;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -38,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
       isLogin = !isLogin;
     });
   }
-
 
   bool _validateInputs() {
     if (isLogin) {
@@ -69,6 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return true;
   }
 
+  Future<void> _openUrlInBrowser() async {
+    final Uri url = Uri.parse('https://samanaladanuma.lk');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   Future<void> _login() async {
     if (!_validateInputs()) return;
@@ -78,14 +82,13 @@ class _LoginScreenState extends State<LoginScreen> {
     await dotenv.load(fileName: "assets/config/.env");
 
     try {
-      final response = await Dio().post('https://samanaladanuma.lk/wp-json/jwt-auth/v1/token',
+      final response = await Dio().post(
+        'https://samanaladanuma.lk/wp-json/jwt-auth/v1/token',
         data: {
           'username': username,
           'password': password,
         },
       );
-
-      debugPrint(response.data.toString());
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -93,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
         final email = data['user_email'];
 
         Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-
         String userId = decodedToken['data']['user']['id'];
 
         final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -124,21 +126,17 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
       } else {
-
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid login credentials')),
         );
       }
     } catch (error) {
-      debugPrint('error: $error');
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error connecting to the server')),
       );
     }
   }
 
-  // Perform Signup
   Future<void> _signup() async {
     if (!_validateInputs()) return;
 
@@ -153,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': username,
-          'role':'reader',
+          'role': 'reader',
           'email': email,
           'password': password,
         }),
@@ -163,7 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
         final data = jsonDecode(response.body);
         final token = data['token'];
 
-        // Save the JWT token in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
 
@@ -189,13 +186,11 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
       } else {
-        // Handle errors
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Signup failed')),
         );
       }
     } catch (error) {
-      // Handle server errors
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error connecting to the server')),
       );
@@ -221,10 +216,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               )
-                  .animate()
-                  .slideY(begin: -0.3, duration: 600.ms)
-                  .fadeIn(duration: 600.ms)
-                  .then(delay: 200.ms),
+              .animate()
+              .slideY(begin: -0.3, duration: 600.ms)
+              .fadeIn(duration: 600.ms)
+              .then(delay: 200.ms),
 
               const SizedBox(height: 40),
 
@@ -298,28 +293,37 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               )
-                  .animate()
-                  .scale(duration: 500.ms, curve: Curves.easeInOut)
-                  .fadeIn(duration: 500.ms),
+              .animate()
+              .scale(duration: 500.ms, curve: Curves.easeInOut)
+              .fadeIn(duration: 500.ms),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
-              GestureDetector(
-                onTap: toggleForm,
-                child: Text(
-                  isLogin
-                      ? "Don't have an account? Sign Up"
-                      : "Already have an account? Login",
-                  style: const TextStyle(
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const BottomNavBar()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                  backgroundColor: Colors.redAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
-                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
               )
-                  .animate()
-                  .slideY(begin: 0.3, duration: 600.ms)
-                  .fadeIn(duration: 600.ms),
+              .animate()
+              .scale(duration: 500.ms, curve: Curves.easeInOut)
+              .fadeIn(duration: 500.ms),
             ],
           ),
         ),
@@ -327,49 +331,46 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTextField(String hint, bool obscureText, TextEditingController controller) {
+  TextField _buildTextField(String hint, bool obscureText, TextEditingController controller) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white54),
+        hintStyle: const TextStyle(color: Colors.grey),
         filled: true,
-        fillColor: Colors.grey[800],
+        fillColor: Colors.white.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
       ),
+      style: const TextStyle(color: Colors.white),
     );
   }
 
-  // Build a text field with password visibility toggle
-  Widget _buildPasswordTextField(String hint, TextEditingController controller, bool isVisible, VoidCallback toggleVisibility) {
+  TextField _buildPasswordTextField(String hint, TextEditingController controller, bool visible, VoidCallback toggleVisibility) {
     return TextField(
       controller: controller,
-      obscureText: !isVisible,
-      style: const TextStyle(color: Colors.white),
+      obscureText: !visible,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white54),
+        hintStyle: const TextStyle(color: Colors.grey),
         filled: true,
-        fillColor: Colors.grey[800],
+        fillColor: Colors.white.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
         suffixIcon: IconButton(
           icon: Icon(
-            isVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.white54,
+            visible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey,
           ),
           onPressed: toggleVisibility,
         ),
       ),
+      style: const TextStyle(color: Colors.white),
     );
   }
 }
