@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mindful_reader/src/screens/itemcards.dart';
+import 'package:mindful_reader/src/screens/login.dart';
 import 'package:mindful_reader/src/widgets/details.dart';
 import 'package:mindful_reader/src/widgets/splashScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,10 +24,12 @@ class _LibraryState extends State<Library> {
 
   List<dynamic> books = [];
   bool isLoading = true;
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
     fetchLibraryBooks();
   }
 
@@ -42,6 +45,21 @@ class _LibraryState extends State<Library> {
       }
     });
   }
+
+  Future<void> _checkLoginStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
+
+  if (token == null || token.isEmpty) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
+  else {
+    _isLoggedIn = true;
+  }
+}
 
   Future<void> fetchLibraryBooks() async {
     try {
@@ -75,7 +93,7 @@ class _LibraryState extends State<Library> {
           isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Username not found in SharedPreferences')),
+          const SnackBar(content: Text('Please login to access library!')),
         );
       }
     } catch (error) {

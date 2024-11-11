@@ -45,7 +45,8 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: KFifthColor,
       ),
-      home: _isLoggedIn ? const BottomNavBar() : const LoginScreen(),
+      // home: _isLoggedIn ? const BottomNavBar() : const LoginScreen(),
+      home: const BottomNavBar(),
     );
   }
 }

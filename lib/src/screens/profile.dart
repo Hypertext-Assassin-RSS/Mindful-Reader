@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mindful_reader/src/widgets/bottomnav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/color.dart';
 import '../screens/login.dart';
@@ -14,15 +15,30 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String username = 'Username';
   String email = 'Email';
+  bool _isLoggedIn = false;
 
 
   @override
   void initState() {
+    _checkLoginStatus();
     _getUserData();
     super.initState();
-
-    
   }
+
+    Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    if (token == null || token.isEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
+    else {
+      _isLoggedIn = true;
+    }
+}
 
 
 Future<void> _getUserData() async {
@@ -211,7 +227,7 @@ class ProfileMenu extends StatelessWidget {
   await prefs.clear();
 
   Navigator.of(context).pushReplacement(
-    MaterialPageRoute(builder: (context) => const LoginScreen()),
+    MaterialPageRoute(builder: (context) => const BottomNavBar()),
   );
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mindful_reader/src/screens/itemcards.dart';
+import 'package:mindful_reader/src/screens/login.dart';
 import 'package:mindful_reader/src/widgets/category.dart';
 import 'package:mindful_reader/src/widgets/details.dart';
 import 'package:mindful_reader/src/widgets/splashScreen.dart';
@@ -19,7 +20,8 @@ class Bookmark extends StatefulWidget {
 class _BookmarkState extends State<Bookmark> {
     List books = [];
     List filteredBooks = [];
-    bool isLoading = true;
+    bool isLoading = false;
+    bool _isLoggedIn = false;
     bool _isSearchVisible = false; 
     final TextEditingController _searchController = TextEditingController(); 
     final FocusNode _searchFocusNode = FocusNode(); 
@@ -27,11 +29,31 @@ class _BookmarkState extends State<Bookmark> {
       @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
     if (books.isEmpty) {
       fetchBooks();
     }
     _searchController.addListener(_filterBooks);
   }
+
+Future<void> _checkLoginStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
+
+  if (token == null || token.isEmpty) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please login to access bookmarks!')),
+        );
+  }
+  else {
+    _isLoggedIn = true;
+  }
+}
+
 
 
     Future<void> fetchBooks() async {

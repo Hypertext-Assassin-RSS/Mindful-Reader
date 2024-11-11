@@ -1,4 +1,4 @@
-package com.samanala.iLeaf
+package com.samanala.Leafi
 
 import io.flutter.embedding.android.FlutterActivity
 
