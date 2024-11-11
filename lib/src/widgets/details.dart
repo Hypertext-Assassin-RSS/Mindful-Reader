@@ -196,33 +196,80 @@ Future<void> _openUrlInBrowser() async {
               ),
               const SizedBox(height: 20),
               Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                   children: [
-                    // If purchased, allow reading, else open URL in browser
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (isPurchased) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl, title: widget.title),
+                                ),
+                              );
+                            } else {
+                              _openUrlInBrowser();
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 40,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              color: KFourthColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              isPurchased ? 'Read' : 'Get Book',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: KPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        InkWell(
+                          onTap: _toggleBookmark,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 40,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              color: isBookmarked ? Colors.yellow[700] : KFourthColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              isBookmarked ? 'Bookmarked' : 'Bookmark',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: isBookmarked ? Colors.black : KPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
-                        if (isPurchased) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl,title:widget.title),
-                            ),
-                          );
-                        } else {
-                          _openUrlInBrowser();
-                        }
+                        
                       },
                       child: Container(
                         alignment: Alignment.center,
                         height: 40,
-                        width: 140,
+                        width: 300,
                         decoration: BoxDecoration(
                           color: KFourthColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          isPurchased ? 'Read' : 'Get Book',
+                          'Sample',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -231,30 +278,10 @@ Future<void> _openUrlInBrowser() async {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    InkWell(
-                      onTap: _toggleBookmark,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 140,
-                        decoration: BoxDecoration(
-                          color: isBookmarked ? Colors.yellow[700] : KFourthColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          isBookmarked ? 'Bookmarked' : 'Bookmark',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: isBookmarked ? Colors.black : KPrimaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 20),
               Row(
                 children: [
