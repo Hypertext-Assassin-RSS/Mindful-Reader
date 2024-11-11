@@ -36,23 +36,24 @@ class _BookmarkState extends State<Bookmark> {
     _searchController.addListener(_filterBooks);
   }
 
-Future<void> _checkLoginStatus() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('token');
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
 
-  if (token == null || token.isEmpty) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please login to access bookmarks!')),
-        );
+    if (token == null || token.isEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please login to access bookmarks!')), 
+            
+          );
+    }
+    else {
+      _isLoggedIn = true;
+    }
   }
-  else {
-    _isLoggedIn = true;
-  }
-}
 
 
 

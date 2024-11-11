@@ -1,8 +1,11 @@
 
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mindful_reader/src/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../colors/color.dart';
@@ -46,13 +49,37 @@ class _DetailsScreenState extends State<DetailsScreen> {
   late bool isPurchased = false;
   String username = '';
   String userId = '';
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
-    fetchBookmarks();
-    checkLibrary();
+    _checkLoginStatus();
     super.initState();
     isBookmarked = widget.isBookmarked;
+  }
+
+    Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    if (token == null || token.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: const Text('Please login to read or access bookmarks!'),
+              action: SnackBarAction(
+              label: 'Login',
+              onPressed: () {
+                  Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+            ),
+            ),
+          );
+    }
+    else {
+      _isLoggedIn = true;
+      fetchBookmarks();
+      checkLibrary();
+    }
   }
 
   Future<void> fetchBookmarks() async {
@@ -109,9 +136,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final username = prefs.getString('username') ?? '';
     await dotenv.load(fileName: "assets/config/.env");
 
-    setState(() {
+    if (_isLoggedIn) {
+      setState(() {
       isBookmarked = !isBookmarked;
-    });
+      });
 
     try {
       if (isBookmarked) {
@@ -143,6 +171,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to update bookmark status. Please try again.'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } 
+    } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update bookmark status. Please login first!.'),
+          action: SnackBarAction(
+              label: 'Login',
+              onPressed: () {
+                  Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+            ),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -234,7 +278,7 @@ Future<void> _openUrlInBrowser() async {
                         ),
                         const SizedBox(width: 20),
                         InkWell(
-                          onTap: _toggleBookmark,
+                          onTap:  _toggleBookmark,
                           child: Container(
                             alignment: Alignment.center,
                             height: 40,
