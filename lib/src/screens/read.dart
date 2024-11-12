@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:no_screenshot/no_screenshot.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReadBookScreen extends StatefulWidget {
   final String bookUrl;
@@ -87,6 +88,23 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     }
   }
 
+    Future<void> _loadLastPage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedPage = prefs.getInt('lastPage_${widget.id}') ?? 0;
+    debugPrint('Last page: $savedPage');
+    
+    setState(() {
+      currentPage = savedPage;
+    });
+  }
+
+    Future<void> _saveLastPage(int page) async {
+    debugPrint('Saving last page: $page');
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('lastPage_${widget.id}', page);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,13 +139,19 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                             pdfViewController = vc;
                           });
                         },
-                        onRender: (pages) {
+                        onRender: (pages) async {
+                          await _loadLastPage();
+                          pdfViewController?.setPage(currentPage);
                           setState(() {
                             totalPages = pages!;
                           });
                         },
                         onPageChanged: (page, total) {
                           setState(() {
+                            debugPrint('Page changed: $page');
+                            if (currentPage != 0) {
+                              _saveLastPage(page!);
+                            }
                             currentPage = page!;
                           });
                         },
