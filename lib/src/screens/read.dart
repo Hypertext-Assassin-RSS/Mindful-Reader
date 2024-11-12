@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:no_screenshot/no_screenshot.dart';
 
-
-
 class ReadBookScreen extends StatefulWidget {
   final String bookUrl;
   final String title;
@@ -20,33 +18,37 @@ class ReadBookScreen extends StatefulWidget {
 class _ReadBookScreenState extends State<ReadBookScreen> {
   final noScreenshot = NoScreenshot.instance;
 
-  
   String? localPath;
   bool isLoading = true;
   int totalPages = 0;
   int currentPage = 0;
   PDFViewController? pdfViewController;
 
-
-
-
-
   @override
   void initState() {
     super.initState();
     noScreenshot.screenshotOff();
-    _downloadAndSavePDF();
+    _loadPDF();
   }
 
-  
+  Future<void> _loadPDF() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${widget.title}.pdf');
 
+    if (await file.exists()) {
+      setState(() {
+        localPath = file.path;
+        isLoading = false;
+      });
+    } else {
+      await _downloadAndSavePDF(file);
+    }
+  }
 
-  Future<void> _downloadAndSavePDF() async {
+  Future<void> _downloadAndSavePDF(File file) async {
     try {
       final response = await http.get(Uri.parse(widget.bookUrl));
       if (response.statusCode == 200) {
-        final dir = await getApplicationDocumentsDirectory();
-        final file = File('${dir.path}/temp.pdf');
         await file.writeAsBytes(response.bodyBytes);
         setState(() {
           localPath = file.path;
