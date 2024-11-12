@@ -250,7 +250,7 @@ Future<void> _openUrlInBrowser() async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl, title: widget.title),
+                                  builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl, title: widget.title,id:widget.id),
                                 ),
                               );
                             } else {

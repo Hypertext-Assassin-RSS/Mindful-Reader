@@ -8,8 +8,9 @@ import 'package:no_screenshot/no_screenshot.dart';
 class ReadBookScreen extends StatefulWidget {
   final String bookUrl;
   final String title;
+  final int id;
 
-  const ReadBookScreen({super.key, required this.bookUrl, required this.title});
+  const ReadBookScreen({super.key, required this.bookUrl, required this.title, required  this.id});
 
   @override
   _ReadBookScreenState createState() => _ReadBookScreenState();
@@ -33,9 +34,11 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
   Future<void> _loadPDF() async {
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/${widget.title}.pdf');
+    final file = File('${dir.path}/${widget.id}.pdf');
 
     if (await file.exists()) {
+      debugPrint('Loading local PDF');
+
       setState(() {
         localPath = file.path;
         isLoading = false;
@@ -46,6 +49,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   }
 
   Future<void> _downloadAndSavePDF(File file) async {
+    debugPrint('Downloading PDF');
     try {
       final response = await http.get(Uri.parse(widget.bookUrl));
       if (response.statusCode == 200) {
