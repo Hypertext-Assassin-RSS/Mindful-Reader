@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mindful_reader/src/screens/login.dart';
 import 'package:mindful_reader/src/widgets/bottomnav.dart';
 import './src/colors/color.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
