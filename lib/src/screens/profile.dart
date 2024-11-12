@@ -15,7 +15,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String username = 'Username';
   String email = 'Email';
-  bool _isLoggedIn = false;
 
 
   @override
@@ -34,9 +33,6 @@ class _ProfileState extends State<Profile> {
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
-    }
-    else {
-      _isLoggedIn = true;
     }
 }
 
