@@ -21,7 +21,6 @@ class _BookmarkState extends State<Bookmark> {
     List books = [];
     List filteredBooks = [];
     bool isLoading = false;
-    bool _isLoggedIn = false;
     bool _isSearchVisible = false; 
     final TextEditingController _searchController = TextEditingController(); 
     final FocusNode _searchFocusNode = FocusNode(); 
@@ -49,9 +48,6 @@ class _BookmarkState extends State<Bookmark> {
             const SnackBar(content: Text('Please login to access bookmarks!')), 
             
           );
-    }
-    else {
-      _isLoggedIn = true;
     }
   }
 

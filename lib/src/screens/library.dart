@@ -24,7 +24,6 @@ class _LibraryState extends State<Library> {
 
   List<dynamic> books = [];
   bool isLoading = true;
-  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -55,9 +54,6 @@ class _LibraryState extends State<Library> {
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
-  }
-  else {
-    _isLoggedIn = true;
   }
 }
 
