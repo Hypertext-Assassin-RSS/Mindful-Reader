@@ -138,7 +138,7 @@ class _LibraryState extends State<Library> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 10.0,
+                  crossAxisSpacing: 7.0,
                   mainAxisSpacing: 10.0,
                   childAspectRatio: 0.75,
                 ),
