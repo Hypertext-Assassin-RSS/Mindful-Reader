@@ -59,7 +59,7 @@ class _BookmarkState extends State<Bookmark> {
       final prefs = await SharedPreferences.getInstance();
       var username = prefs.getString('username') ?? '';
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books/allbookmarks',
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/api/bookmarks/allbookmarks',
       data: {
           'username': username,
         },
@@ -69,7 +69,7 @@ class _BookmarkState extends State<Bookmark> {
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            books = response.data;
+            books = response.data['productDetails'];
             filteredBooks = books;
             isLoading = false;
           });
@@ -161,7 +161,7 @@ class _BookmarkState extends State<Bookmark> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 10.0,
+                  crossAxisSpacing: 7.0,
                   mainAxisSpacing: 10.0,
                   childAspectRatio: 0.75,
                 ),
@@ -182,6 +182,7 @@ class _BookmarkState extends State<Bookmark> {
                                 author: book['author'] ?? 'Unknown Author',
                                 description: book['description'] ?? 'No description available.',
                                 bookUrl: book['pdf_url'],
+                                sample_url: book['sample_url'],
                                 isBookmarked: book['bookmarked'] ?? false,
                                 id: book['_id'],
                                 size: book['size'] ?? '00',

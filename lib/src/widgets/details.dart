@@ -18,6 +18,7 @@ class DetailsScreen extends StatefulWidget {
   final String author;
   final String description;
   final String bookUrl;
+  final String sample_url;
   final String size;
   final String pages;
   final String price;
@@ -36,7 +37,8 @@ class DetailsScreen extends StatefulWidget {
     required this.size,
     required this.pages,
     required this.price,
-    required this.rating,
+    required this.rating, 
+    required this.sample_url,
   });
 
   @override
@@ -84,13 +86,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<void> fetchBookmarks() async {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getString('username') ?? '';
+
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/bookmarks/title',
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/api/bookmarks/title',
           data: {
             "username": username,
             'title': widget.title,
           });
-      if (response.statusCode == 200 && response.data.isNotEmpty) {
+
+      if (response.data['message']) {
         setState(() {
           isBookmarked = true;
         });
@@ -108,8 +112,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getString('username') ?? '';
     userId = prefs.getString('userId') ?? '';
+
+    debugPrint('userId: $userId');
+
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/library',
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/api/library/purchased/title',
           data: {
             'id':userId,
             'title': widget.title,
@@ -142,14 +149,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     try {
       if (isBookmarked) {
-        await Dio().post('${dotenv.env['API_BASE_URL']}/bookmarks/add',
+        await Dio().post('${dotenv.env['API_BASE_URL']}/api/bookmarks/add',
           data: {
             'username': username,
             'title': widget.title,
           },
         );
       } else {
-        await Dio().delete('${dotenv.env['API_BASE_URL']}/bookmarks/remove',
+        await Dio().delete('${dotenv.env['API_BASE_URL']}/api/bookmarks/remove',
           data: {
             'username': username,
             'title': widget.title,
@@ -301,7 +308,12 @@ Future<void> _openUrlInBrowser() async {
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
-                        
+                        Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReadBookScreen(bookUrl: widget.sample_url, title: widget.title,id:widget.id),
+                                ),
+                              );
                       },
                       child: Container(
                         alignment: Alignment.center,

@@ -68,7 +68,7 @@ class _LibraryState extends State<Library> {
       if (username.isNotEmpty) {
         var dio = Dio();
         final response = await dio.get(
-          '${dotenv.env['API_BASE_URL']}/library/' + userId,
+          '${dotenv.env['API_BASE_URL']}/api/library/' + userId,
         );
 
         if (response.statusCode == 200) {
@@ -138,7 +138,7 @@ class _LibraryState extends State<Library> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 10.0,
+                  crossAxisSpacing: 7.0,
                   mainAxisSpacing: 10.0,
                   childAspectRatio: 0.75,
                 ),
@@ -159,6 +159,7 @@ class _LibraryState extends State<Library> {
                                 author: book['author'] ?? 'Unknown Author',
                                 description: book['description'] ?? 'No description available.',
                                 bookUrl: book['pdf_url'],
+                                sample_url: book['sample_url'],
                                 isBookmarked: book['bookmarked'] ?? false,
                                 id: book['_id'],
                                 size: book['size'] ?? '00',

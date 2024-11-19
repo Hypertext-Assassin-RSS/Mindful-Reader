@@ -39,23 +39,37 @@ class _CategoryCardState extends State<CategoryCard> {
 }
 
   // Fetch categories from the API
-  Future<void> _fetchCategories() async {
-    await dotenv.load(fileName: "assets/config/.env");
-    try {
-      var response = await Dio().get('${dotenv.env['API_BASE_URL']}/categorie/categories');
+Future<void> _fetchCategories() async {
+  await dotenv.load(fileName: "assets/config/.env");
+  try {
+    var response = await Dio().get('${dotenv.env['API_BASE_URL']}/api/categories/all');
+    if (response.statusCode == 200) {
+      final data = response.data;
       setState(() {
-        categories = List<String>.from(response.data.map((item) => item['name']));
+        if (data is List) {
+          categories = List<String>.from(data.map((item) => item['name'] ?? 'Unknown'));
+        } else if (data is Map && data.containsKey('categories')) {
+          categories = List<String>.from((data['categories'] as List).map((item) => item['name'] ?? 'Unknown'));
+        } else {
+          print('Unexpected response format: $data');
+        }
         isLoading = false;
       });
-    } catch (error) {
-      print('Error fetching categories: $error');
-      if (_isLoggedIn) {
-          setState(() {
-            isLoading = false;
-        });
-      }
+    } else {
+      print('Failed to fetch categories: ${response.statusCode}');
+      setState(() {
+        isLoading = false;
+      });
     }
+  } catch (error) {
+    print('Error fetching categories: $error');
+    setState(() {
+      isLoading = false;
+    });
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
