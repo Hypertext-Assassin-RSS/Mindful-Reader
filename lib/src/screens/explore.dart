@@ -38,7 +38,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     debugPrint('Getting Books');
     await dotenv.load(fileName: "assets/config/.env");
     try {
-      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/books/all');
+      final response = await Dio().get('${dotenv.env['API_BASE_URL']}/api/products/all');
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
@@ -149,6 +149,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   author: book['author'] ?? 'Unknown Author',
                                   description: book['description'] ?? 'No description available.',
                                   bookUrl: book['pdf_url'],
+                                  sample_url: book['sample_url'],
                                   isBookmarked: book['bookmarked'] ?? false,
                                   id: book['_id'],
                                   size: book['size'] ?? '00',
@@ -189,6 +190,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     author: book['author'] ?? 'Unknown Author',
                                     description: book['description'] ?? 'No description available.',
                                     bookUrl: book['pdf_url'],
+                                    sample_url: book['sample_url'],
                                     isBookmarked: book['bookmarked'] ?? false,
                                     id: book['_id'],
                                     size: book['size'] ?? '00',
