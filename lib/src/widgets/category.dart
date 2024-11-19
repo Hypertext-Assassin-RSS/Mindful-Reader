@@ -14,7 +14,6 @@ class CategoryCard extends StatefulWidget {
 class _CategoryCardState extends State<CategoryCard> {
   List<String> categories = [];
   bool isLoading = true;
-  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -34,7 +33,6 @@ class _CategoryCardState extends State<CategoryCard> {
     // );
   }
   else {
-    _isLoggedIn = true;
   }
 }
 
