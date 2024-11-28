@@ -72,7 +72,7 @@ Future<void> _fetchCategories() async {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      // return const Center(child: CircularProgressIndicator());
     }
 
     return Padding(

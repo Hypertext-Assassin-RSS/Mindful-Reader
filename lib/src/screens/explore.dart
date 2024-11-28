@@ -123,8 +123,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+      body: isLoading? Column(
+                  children: [
+                    const LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                    const SizedBox(height: 10),
+                    // const Text(
+                    //   "Loading books, please wait...",
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey),
+                    // ),
+                  ],
+                )
           : SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
