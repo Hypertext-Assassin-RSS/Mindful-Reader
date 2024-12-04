@@ -1,9 +1,8 @@
 name: Flutter Test and PR
 
 on:
-  push:
-    branches:
-      - dev  # Trigger the workflow on commits to the 'dev' branch
+  pull_request:
+    branches: [ "release" ]
 
 jobs:
   test:
