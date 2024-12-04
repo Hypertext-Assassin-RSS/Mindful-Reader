@@ -257,7 +257,7 @@ Future<void> _openUrlInBrowser() async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl, title: widget.title,id:widget.id),
+                                  builder: (context) => ReadBookScreen(bookUrl: widget.bookUrl, title: widget.title,id:widget.id, type: 'book',),
                                 ),
                               );
                             } else {
@@ -311,7 +311,7 @@ Future<void> _openUrlInBrowser() async {
                         Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ReadBookScreen(bookUrl: widget.sample_url, title: widget.title,id:widget.id),
+                                  builder: (context) => ReadBookScreen(bookUrl: widget.sample_url, title: widget.title,id:widget.id,type:'Sample'),
                                 ),
                               );
                       },

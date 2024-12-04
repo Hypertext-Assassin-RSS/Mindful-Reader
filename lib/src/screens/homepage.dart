@@ -69,105 +69,117 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final random = Random();
-    final randomBook = books.isNotEmpty ? books[random.nextInt(books.length)] : null;
+Widget build(BuildContext context) {
+  final random = Random();
+  final randomBook = books.isNotEmpty ? books[random.nextInt(books.length)] : null;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : BannerSection(book: randomBook ?? {}),
-            const SizedBox(height: 5),
-            const CategoryCard(),
-            const SizedBox(height: 5),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: books.map((book) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SplashScreen(
-                            imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                            nextScreen: DetailsScreen(
-                              imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                              title: book['title'] ?? 'Unknown Title',
-                              author: book['author'] ?? 'Unknown Author',
-                              description: book['description'] ?? 'No description available.',
-                              bookUrl: book['pdf_url'],
-                              sample_url: book['sample_url'],
-                              isBookmarked: book['bookmarked'] ?? false,
-                              id: book['_id'],
-                              size: book['size'] ?? '00',
-                              pages: book['pages'] ?? '01',
-                              price: book['price'] ?? '00',
-                              rating: book['rating'] ?? '5.00',
-                            ),
+  return Scaffold(
+    body: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          isLoading
+              ? Column(
+                  children: [
+                    const LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                    const SizedBox(height: 10),
+                    // const Text(
+                    //   "Loading books, please wait...",
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey),
+                    // ),
+                  ],
+                )
+              : BannerSection(book: randomBook ?? {}),
+          const SizedBox(height: 5),
+          const CategoryCard(),
+          const SizedBox(height: 5),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: books.map((book) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SplashScreen(
+                          imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
+                          nextScreen: DetailsScreen(
+                            imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
+                            title: book['title'] ?? 'Unknown Title',
+                            author: book['author'] ?? 'Unknown Author',
+                            description: book['description'] ?? 'No description available.',
+                            bookUrl: book['pdf_url'],
+                            sample_url: book['sample_url'],
+                            isBookmarked: book['bookmarked'] ?? false,
+                            id: book['_id'],
+                            size: book['size'] ?? '00',
+                            pages: book['pages'] ?? '01',
+                            price: book['price'] ?? '00',
+                            rating: book['rating'] ?? '5.00',
                           ),
                         ),
-                      );
-                    },
-
-                    child: ItemCards(
-                      imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                      text1: book['title'] ?? 'Unknown Title',
-                      text2: book['author'] ?? 'Unknown Author',
-                    ),
-                  );
-                }).toList(),
-              ),
+                      ),
+                    );
+                  },
+                  child: ItemCards(
+                    imagepic: book['cover_url'] ?? 'assets/images/image_not.jpg',
+                    text1: book['title'] ?? 'Unknown Title',
+                    text2: book['author'] ?? 'Unknown Author',
+                  ),
+                );
+              }).toList(),
             ),
-            const SizedBox(height: 10),
-            const Trends(),
-            const SizedBox(height: 15),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: books.map((book) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SplashScreen(
-                            imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                            nextScreen: DetailsScreen(
-                              imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                              title: book['title'] ?? 'Unknown Title',
-                              author: book['author'] ?? 'Unknown Author',
-                              description: book['description'] ?? 'No description available.',
-                              bookUrl: book['pdf_url'],
-                              sample_url: book['sample_url'],
-                              isBookmarked: book['bookmarked'] ?? false,
-                              id: book['_id'],
-                              size: book['size'] ?? '00',
-                              pages: book['pages'] ?? '01',
-                              price: book['price'] ?? '00',
-                              rating: book['rating'] ?? '5.00',
-                            ),
+          ),
+          const SizedBox(height: 10),
+          const Trends(),
+          const SizedBox(height: 15),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: books.map((book) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SplashScreen(
+                          imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
+                          nextScreen: DetailsScreen(
+                            imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
+                            title: book['title'] ?? 'Unknown Title',
+                            author: book['author'] ?? 'Unknown Author',
+                            description: book['description'] ?? 'No description available.',
+                            bookUrl: book['pdf_url'],
+                            sample_url: book['sample_url'],
+                            isBookmarked: book['bookmarked'] ?? false,
+                            id: book['_id'],
+                            size: book['size'] ?? '00',
+                            pages: book['pages'] ?? '01',
+                            price: book['price'] ?? '00',
+                            rating: book['rating'] ?? '5.00',
                           ),
                         ),
-                      );
-                    },
-                    child: ItemCards(
-                      imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
-                      text1: book['title'] ?? 'Unknown Title',
-                      text2: book['author'] ?? 'Unknown Author',
-                    ),
-                  );
-                }).toList(),
-              ),
+                      ),
+                    );
+                  },
+                  child: ItemCards(
+                    imagepic: book['cover_url'] ?? 'assets/images/image_not.jpg',
+                    text1: book['title'] ?? 'Unknown Title',
+                    text2: book['author'] ?? 'Unknown Author',
+                  ),
+                );
+              }).toList(),
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

@@ -123,8 +123,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+      body: isLoading? Column(
+                  children: [
+                    const LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                    const SizedBox(height: 10),
+                    // const Text(
+                    //   "Loading books, please wait...",
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey),
+                    // ),
+                  ],
+                )
           : SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
@@ -142,9 +153,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         context,
                             MaterialPageRoute(
                               builder: (context) => SplashScreen(
-                                imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
                                 nextScreen: DetailsScreen(
-                                  imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                  imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
                                   title: book['title'] ?? 'Unknown Title',
                                   author: book['author'] ?? 'Unknown Author',
                                   description: book['description'] ?? 'No description available.',
@@ -162,7 +173,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           );
                         },
                           child: ItemCards(
-                            imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                            imagepic: book['cover_url'] ?? 'assets/images/image_not.jpg',
                             text1: book['title'] ?? 'Unknown Title',
                             text2: book['author'] ?? 'Unknown Author',
                           ),
@@ -183,9 +194,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => SplashScreen(
-                                  imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                  imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
                                   nextScreen: DetailsScreen(
-                                    imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                    imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
                                     title: book['title'] ?? 'Unknown Title',
                                     author: book['author'] ?? 'Unknown Author',
                                     description: book['description'] ?? 'No description available.',
@@ -203,7 +214,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             );
                           },
                           child: ItemCards(
-                            imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                            imagepic: book['cover_url'] ?? 'assets/images/image_not.jpg',
                             text1: book['title'] ?? 'Unknown Title',
                             text2: book['author'] ?? 'Unknown Author',
                           ),
