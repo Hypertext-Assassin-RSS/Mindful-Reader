@@ -152,9 +152,9 @@ class _LibraryState extends State<Library> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => SplashScreen(
-                              imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                              imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
                               nextScreen: DetailsScreen(
-                                imageUrl: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                                imageUrl: book['cover_url'] ?? 'assets/images/image_not.jpg',
                                 title: book['title'] ?? 'Unknown Title',
                                 author: book['author'] ?? 'Unknown Author',
                                 description: book['description'] ?? 'No description available.',
@@ -172,7 +172,7 @@ class _LibraryState extends State<Library> {
                         );
                       },
                       child: ItemCards(
-                        imagepic: book['cover_url'] ?? 'assets/images/imgae_not.jpg',
+                        imagepic: book['cover_url'] ?? 'assets/images/image_not.jpg',
                         text1: book['title'] ?? 'Unknown Title',
                         text2: book['author'] ?? 'Unknown Author',
                       ),

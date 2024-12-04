@@ -10,8 +10,9 @@ class ReadBookScreen extends StatefulWidget {
   final String bookUrl;
   final String title;
   final int id;
+  final String type;
 
-  const ReadBookScreen({super.key, required this.bookUrl, required this.title, required  this.id});
+  const ReadBookScreen({super.key, required this.bookUrl, required this.title, required  this.id, required this.type});
 
   @override
   _ReadBookScreenState createState() => _ReadBookScreenState();
@@ -35,7 +36,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
   Future<void> _loadPDF() async {
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/${widget.id}.pdf');
+    final file = File('${dir.path}/${widget.id}_${widget.type}.pdf');
+
+    debugPrint('Local path: ${file.path}');
 
     if (await file.exists()) {
       debugPrint('Loading local PDF');
