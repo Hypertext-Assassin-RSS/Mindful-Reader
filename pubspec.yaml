@@ -36,11 +36,27 @@ dependencies:
   url_launcher: ^6.3.0
   jwt_decoder: ^2.0.1
   encrypt: ^5.0.3
+  flutter_native_splash: ^2.4.3
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
+    
+flutter_native_splash:
+  background_image: assets/background.png
+  image: assets/logo.png
+  branding: assets/branding.png
+  branding_mode: bottom
+  branding_bottom_padding: 24
+  android: true
+  ios: true
+  web: false
+  android_12:
+    icon_background_color: "#FFFFFF"
+    image: assets/android_logo.png
+    branding: assets/android_branding.png
+    background_image: assets/background.png
 
 flutter_launcher_icons:
   ios: true
