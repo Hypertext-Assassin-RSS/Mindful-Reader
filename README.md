@@ -5,8 +5,6 @@
   <b>Mindful-Reader</b>
   <br>
 </h1>
-
-
 <br>
 
 <!-- ![alt text](assets/ScreenShot/Screenshot_1724296547.png) | ![alt text](assets/ScreenShot/Screenshot_1724296554.png) | ![alt text](assets/ScreenShot/Screenshot_1724296558.png) | ![alt text](assets/ScreenShot/Screenshot_1724296563.png)
